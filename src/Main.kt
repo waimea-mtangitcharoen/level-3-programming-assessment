@@ -98,26 +98,27 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 36)
 
         instructionLabel = JLabel("Welcome to Sweet Sundae! Many customers visit Sunny city's ice cream shop a day, so your job is to complete those orders! To do so:" +
-                "1. You are allowed to move around the map freely (unless out of bounds!)" +
-                "2. ")
+                "1. You are allowed to move around the map freely using the buttons (unless out of bounds!)" +
+                "2. To complete the order, collect all the ingredients required in the recipe in time. " +
+                "Tips: Remember where things are!"    )
 
         upButton = JButton("▲")
-        upButton.bounds = Rectangle(400,180,60,70)
+        upButton.bounds = Rectangle(400,180,60,60)
         upButton.addActionListener(this)
         add(upButton)
 
         downButton = JButton("▼")
-        downButton.bounds = Rectangle(400,250,60,70)
+        downButton.bounds = Rectangle(400,240,60,60)
         downButton.addActionListener(this)
         add(downButton)
 
         leftButton = JButton("◀")
-        leftButton.bounds = Rectangle(340,220,60,60)
+        leftButton.bounds = Rectangle(340,240,60,60)
         leftButton.addActionListener(this)
         add(leftButton)
 
         rightButton = JButton("▶")
-        rightButton.bounds = Rectangle(460,220,60,60)
+        rightButton.bounds = Rectangle(460,240,60,60)
         rightButton.addActionListener(this)
         add(rightButton)
 
