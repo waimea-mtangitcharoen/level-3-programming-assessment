@@ -64,6 +64,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var downButton: JButton
     private lateinit var leftButton: JButton
     private lateinit var rightButton: JButton
+    private lateinit var currentLabel: JLabel
 
     /**
      * Configure the UI and display it
@@ -100,7 +101,10 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         instructionLabel = JLabel("Welcome to Sweet Sundae! Many customers visit Sunny city's ice cream shop a day, so your job is to complete those orders! To do so:" +
                 "1. You are allowed to move around the map freely using the buttons (unless out of bounds!)" +
                 "2. To complete the order, collect all the ingredients required in the recipe in time. " +
-                "Tips: Remember where things are!"    )
+                "Tips: Remember where things are!")
+        instructionLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        instructionLabel.bounds = Rectangle(30,30,200,10)
+        add(instructionLabel)
 
         upButton = JButton("▲")
         upButton.bounds = Rectangle(400,180,60,60)
@@ -121,6 +125,12 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         rightButton.bounds = Rectangle(460,240,60,60)
         rightButton.addActionListener(this)
         add(rightButton)
+
+        currentLabel = JLabel("Counter")
+        currentLabel.bounds = Rectangle(300,10,100,100)
+        currentLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 36)
+        add(currentLabel)
+
 
 //        clicksLabel = JLabel("CLICK INFO HERE")
 //        clicksLabel.horizontalAlignment = SwingConstants.CENTER
