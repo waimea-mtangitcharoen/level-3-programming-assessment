@@ -27,9 +27,12 @@ fun main() {
     val app = App()         // Create the app model
     MainWindow(app)         // Create and show the UI, using the app model
 
-    val locations  = mutableListOf<String>()
-    locations.add(App.Location("Fridge", "Berries").toString())
+
+
+
 }
+
+class Location(val name:String, val description:String, val itemName: String)
 
 
 /**
@@ -38,22 +41,17 @@ fun main() {
  * stored, plus any application logic functions
  */
 class App() {
-    class Location(var name: String, var item: String){
 
+    val locationList = mutableListOf<Location>()
+
+    init {
+        setupMap()
     }
 
+    fun setupMap() {
+        locationList.add(Location("Fridge", "Cold", "Ice cream"))
+    }
 
-//    // Constants defining any key values
-//    val MAX_CLICKS = 10
-//
-//    // Data fields
-//    var clicks = 0
-//
-//    // Application logic functions
-//    fun updateClickCount() {
-//        clicks++
-//        if (clicks > MAX_CLICKS) clicks = MAX_CLICKS
-//    }
 }
 
 
@@ -82,6 +80,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     init {
         configureWindow()               // Configure the window
         addControls()                   // Build the UI
+
 
         setLocationRelativeTo(null)     // Centre the window
         isVisible = true                // Make it visible
@@ -169,6 +168,9 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
      * of the application model
      */
     fun updateView() {
+
+        instructionLabel.text = app.locationList[0].name
+
 //        if (app.clicks == app.MAX_CLICKS) {
 //            clicksLabel.text = "Max clicks reached!"
 //            clickButton.isEnabled = false
