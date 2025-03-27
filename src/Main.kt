@@ -32,7 +32,7 @@ fun main() {
 
 }
 
-class Location(val name:String, val description:String, val itemName: String)
+class Location(val name:String, val description:String, val itemName: String? = null)
 
 
 /**
@@ -44,12 +44,26 @@ class App() {
 
     val locationList = mutableListOf<Location>()
 
+
     init {
         setupMap()
     }
 
     fun setupMap() {
+        locationList.add(Location("Counter", "A place for you to place order", ""))
         locationList.add(Location("Fridge", "Cold", "Ice cream"))
+        locationList.add(Location("Chocolate room", "A room full of chocolate", "chocolate"))
+        locationList.add(Location("Topping station", "", "Sprinkle"))
+        locationList.add(Location("Fruit bar", "Fruits are stored in here", "Cherry"))
+    }
+
+    private var currentIndex = 0
+    var currentLocation = locationList[currentIndex]
+
+    fun moveNorth() {
+        if (currentIndex + 2 < locationList.size) {
+            currentIndex += 2
+        }
     }
 
 }
@@ -67,7 +81,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var clickButton: JButton
     private lateinit var instructionLabel: JLabel
     private lateinit var instructionButton: JButton
-    private lateinit var upButton: JButton
+    private lateinit var NorthButton: JButton
     private lateinit var downButton: JButton
     private lateinit var leftButton: JButton
     private lateinit var rightButton: JButton
@@ -120,10 +134,10 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         instructionButton.addActionListener(this)
         add(instructionButton)
 
-        upButton = JButton("▲")
-        upButton.bounds = Rectangle(400,180,60,60)
-        upButton.addActionListener(this)
-        add(upButton)
+        NorthButton = JButton("▲")
+        NorthButton.bounds = Rectangle(400,180,60,60)
+        NorthButton.addActionListener(this)
+        add(NorthButton)
 
         downButton = JButton("▼")
         downButton.bounds = Rectangle(400,240,60,60)
@@ -169,7 +183,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
      */
     fun updateView() {
 
-        instructionLabel.text = app.locationList[0].name
+        currentLabel.text = app.currentLocation.name
 
 //        if (app.clicks == app.MAX_CLICKS) {
 //            clicksLabel.text = "Max clicks reached!"
@@ -188,6 +202,10 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
      */
     override fun actionPerformed(e: ActionEvent?) {
         when (e?.source) {
+              NorthButton ->{
+                  app.moveNorth()
+                  updateView()
+              }
 //            clickButton -> {
 //                app.updateClickCount()
 //                updateView()
