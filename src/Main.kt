@@ -32,7 +32,16 @@ fun main() {
 
 }
 
-class Location(val name:String, val description:String, val itemName: String? = null)
+class Location(
+    val name:String,
+    val description:String,
+    var north: Int? = null,
+    var east: Int? = null,
+    var south: Int? = null,
+    var west: Int? = null,
+    val itemName: String? = null,
+)
+
 
 
 /**
@@ -43,28 +52,46 @@ class Location(val name:String, val description:String, val itemName: String? = 
 class App() {
 
     val locationList = mutableListOf<Location>()
-
+    var currentLocation = 0
 
     init {
         setupMap()
     }
 
     fun setupMap() {
-        locationList.add(Location("Counter", "A place for you to place order", ""))
-        locationList.add(Location("Fridge", "Cold", "Ice cream"))
-        locationList.add(Location("Chocolate room", "A room full of chocolate", "chocolate"))
-        locationList.add(Location("Topping station", "", "Sprinkle"))
-        locationList.add(Location("Fruit bar", "Fruits are stored in here", "Cherry"))
+        locationList.add(Location("Counter", "This is where your order will be placed.", 1, null, null, null,""))  // 0
+        locationList.add(Location("Fridge", "You can collect ice cream from here", null, 2,0,null, "ice cream")) // 1
+        locationList.add(Location("Chocolate room", "You can collect chocolates from here", 3,null,null,1   )) // 2
+        locationList.add(Location("Fruit bar", "You can collect fruits here",4,null,2,null, "cherry")) // 3
+        locationList.add(Location("Topping station", "You can collect some sprinkles here", null,6,3,5,"sprinkle")) // 4
+        locationList.add(Location("Soft-serve machine room", "You can collect soft-serve here",null,4,null,null, "soft serve")) // 5
+        locationList.add(Location("Cookies cupboard", "You can collect cookies here", 7,null,null,4,"cookie")) // 6
+        locationList.add(Location("Dish room", "You can collect boat here", null,null,6,null,"boat")) // 7
+        locationList.add(Location("Paper cupboard", "You can collect paper cup here", null,11,9,0,"paper cup")) // 8
+        locationList.add(Location("Cone room", "You can collect cones here", 8,null,10,null, "cone")) //9
+        locationList.add(Location("Candy storage", "You can collect candies here",8,null,10,null,"gummy bear")) //10
+        locationList.add(Location("Sauce fountain", "You can put sauces on in here", 12,null,null,8, "strawberry sauce")) //11
+        locationList.add(Location("Dairy fridge", "You can collect dairy stuff here", null,null,11,null,"whip cream")) //12
     }
 
-    private var currentIndex = 0
-    var currentLocation = locationList[currentIndex]
+
 
     fun moveNorth() {
-        if (currentIndex + 2 < locationList.size) {
-            currentIndex += 2
-        }
+        currentLocation = locationList[currentLocation].north!!
     }
+
+    fun moveSouth() {
+        currentLocation = locationList[currentLocation].south!!
+    }
+
+    fun moveEast() {
+        currentLocation = locationList[currentLocation].east!!
+    }
+
+    fun moveWest() {
+        currentLocation = locationList[currentLocation].west!!
+    }
+
 
 }
 
@@ -81,10 +108,10 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var clickButton: JButton
     private lateinit var instructionLabel: JLabel
     private lateinit var instructionButton: JButton
-    private lateinit var NorthButton: JButton
-    private lateinit var downButton: JButton
-    private lateinit var leftButton: JButton
-    private lateinit var rightButton: JButton
+    private lateinit var northButton: JButton
+    private lateinit var southButton: JButton
+    private lateinit var eastButton: JButton
+    private lateinit var westButton: JButton
     private lateinit var currentLabel: JLabel
     private lateinit var recipeLabel: JLabel
 
@@ -134,25 +161,25 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         instructionButton.addActionListener(this)
         add(instructionButton)
 
-        NorthButton = JButton("▲")
-        NorthButton.bounds = Rectangle(400,180,60,60)
-        NorthButton.addActionListener(this)
-        add(NorthButton)
+        northButton = JButton("▲")
+        northButton.bounds = Rectangle(400,180,60,60)
+        northButton.addActionListener(this)
+        add(northButton)
 
-        downButton = JButton("▼")
-        downButton.bounds = Rectangle(400,240,60,60)
-        downButton.addActionListener(this)
-        add(downButton)
+        southButton = JButton("▼")
+        southButton.bounds = Rectangle(400,240,60,60)
+        southButton.addActionListener(this)
+        add(southButton)
 
-        leftButton = JButton("◀")
-        leftButton.bounds = Rectangle(340,240,60,60)
-        leftButton.addActionListener(this)
-        add(leftButton)
+        eastButton = JButton("◀")
+        eastButton.bounds = Rectangle(340,240,60,60)
+        eastButton.addActionListener(this)
+        add(eastButton)
 
-        rightButton = JButton("▶")
-        rightButton.bounds = Rectangle(460,240,60,60)
-        rightButton.addActionListener(this)
-        add(rightButton)
+        westButton = JButton("▶")
+        westButton.bounds = Rectangle(460,240,60,60)
+        westButton.addActionListener(this)
+        add(westButton)
 
         currentLabel = JLabel("Counter")
         currentLabel.bounds = Rectangle(370,40,200,100)
@@ -183,7 +210,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
      */
     fun updateView() {
 
-        currentLabel.text = app.currentLocation.name
+        currentLabel.text = app.locationList[app.currentLocation].name
 
 //        if (app.clicks == app.MAX_CLICKS) {
 //            clicksLabel.text = "Max clicks reached!"
@@ -202,10 +229,25 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
      */
     override fun actionPerformed(e: ActionEvent?) {
         when (e?.source) {
-              NorthButton ->{
+              northButton ->{
                   app.moveNorth()
                   updateView()
               }
+
+              southButton ->{
+                  app.moveSouth()
+                  updateView()
+              }
+
+            eastButton ->{
+                app.moveEast()
+                updateView()
+            }
+
+            westButton ->{
+                app.moveWest()
+                updateView()
+            }
 //            clickButton -> {
 //                app.updateClickCount()
 //                updateView()
