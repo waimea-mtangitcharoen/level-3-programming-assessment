@@ -17,6 +17,7 @@ import com.formdev.flatlaf.FlatDarkLaf
 import java.awt.*
 import java.awt.event.*
 import javax.swing.*
+import javax.swing.border.Border
 
 
 /**
@@ -77,20 +78,25 @@ class App() {
 
 
     fun moveNorth() {
-        currentLocation = locationList[currentLocation].north!!
+        if (locationList[currentLocation].north != null)
+            currentLocation = locationList[currentLocation].north!!
     }
 
     fun moveSouth() {
-        currentLocation = locationList[currentLocation].south!!
+        if (locationList[currentLocation].south != null)
+            currentLocation = locationList[currentLocation].south!!
     }
 
     fun moveEast() {
-        currentLocation = locationList[currentLocation].east!!
+        if (locationList[currentLocation].east != null)
+            currentLocation = locationList[currentLocation].east!!
     }
 
     fun moveWest() {
-        currentLocation = locationList[currentLocation].west!!
+        if (locationList[currentLocation].west != null)
+            currentLocation = locationList[currentLocation].west!!
     }
+
 
 
 }
@@ -113,7 +119,9 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var eastButton: JButton
     private lateinit var westButton: JButton
     private lateinit var currentLabel: JLabel
+    private lateinit var currentDescriptionLabel: JLabel
     private lateinit var recipeLabel: JLabel
+    private lateinit var warningLabel: JLabel
 
     /**
      * Configure the UI and display it
@@ -182,10 +190,35 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         add(eastButton)
 
         currentLabel = JLabel("Counter")
-        currentLabel.bounds = Rectangle(370,40,200,100)
+        currentLabel.bounds = Rectangle(330,60,200,50)
         currentLabel.foreground = Color.white
-        currentLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 36)
+        currentLabel.horizontalAlignment = SwingConstants.CENTER
+        currentLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 24)
         add(currentLabel)
+
+        currentDescriptionLabel = JLabel("This is where your order will be place!")
+        currentDescriptionLabel.bounds = Rectangle(330, 100, 200,50)
+        currentDescriptionLabel.font = Font(Font.SANS_SERIF,Font.PLAIN,11)
+        currentDescriptionLabel.horizontalAlignment = SwingConstants.CENTER
+        currentDescriptionLabel.foreground = Color.white
+        add(currentDescriptionLabel)
+
+        recipeLabel = JLabel("Recipe for ...")
+        recipeLabel.bounds = Rectangle(30, 110, 200,200)
+        recipeLabel.font = Font(Font.SANS_SERIF,Font.PLAIN, 12)
+        recipeLabel.horizontalAlignment = SwingConstants.CENTER
+        recipeLabel.verticalAlignment = SwingConstants.TOP
+        recipeLabel.foreground = Color.white
+        recipeLabel.border = BorderFactory.createRaisedSoftBevelBorder()
+        recipeLabel.background = Color.white
+        add(recipeLabel)
+
+
+//        warningLabel = JLabel("Warning: No location in this direction")
+//        warningLabel.bounds = Rectangle(335,40, 200,200)
+//        warningLabel.foreground = Color.red
+//        warningLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
+//        add(warningLabel)
 
 
 //        clicksLabel = JLabel("CLICK INFO HERE")
@@ -211,6 +244,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     fun updateView() {
 
         currentLabel.text = app.locationList[app.currentLocation].name
+        currentDescriptionLabel.text = app.locationList[app.currentLocation].description
 
 //        if (app.clicks == app.MAX_CLICKS) {
 //            clicksLabel.text = "Max clicks reached!"
@@ -239,15 +273,15 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
                   updateView()
               }
 
-            eastButton ->{
-                app.moveEast()
-                updateView()
-            }
+              eastButton ->{
+                  app.moveEast()
+                  updateView()
+              }
 
-            westButton ->{
-                app.moveWest()
-                updateView()
-            }
+              westButton ->{
+                  app.moveWest()
+                  updateView()
+              }
 //            clickButton -> {
 //                app.updateClickCount()
 //                updateView()
