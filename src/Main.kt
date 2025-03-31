@@ -171,15 +171,15 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         southButton.addActionListener(this)
         add(southButton)
 
-        eastButton = JButton("◀")
-        eastButton.bounds = Rectangle(340,240,60,60)
-        eastButton.addActionListener(this)
-        add(eastButton)
-
-        westButton = JButton("▶")
-        westButton.bounds = Rectangle(460,240,60,60)
+        westButton = JButton("◀")
+        westButton.bounds = Rectangle(340,240,60,60)
         westButton.addActionListener(this)
         add(westButton)
+
+        eastButton = JButton("▶")
+        eastButton.bounds = Rectangle(460,240,60,60)
+        eastButton.addActionListener(this)
+        add(eastButton)
 
         currentLabel = JLabel("Counter")
         currentLabel.bounds = Rectangle(370,40,200,100)
