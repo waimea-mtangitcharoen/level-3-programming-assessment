@@ -59,26 +59,26 @@ class App() {
         setupMap()
     }
 
+    // Create location and define the connection
     fun setupMap() {
-        locationList.add(Location("Counter", "This is where your order will be placed.", 1, null, null, null,""))  // 0
+        locationList.add(Location("Counter", "This is where your order will be placed.", 1, 8, null, null,""))  // 0
         locationList.add(Location("Fridge", "You can collect ice cream from here", null, 2,0,null, "ice cream")) // 1
-        locationList.add(Location("Chocolate room", "You can collect chocolates from here", 3,null,null,1   )) // 2
+        locationList.add(Location("Chocolate room", "You can collect chocolates from here", 3,null,null,1, "chocolate")) // 2
         locationList.add(Location("Fruit bar", "You can collect fruits here",4,null,2,null, "cherry")) // 3
         locationList.add(Location("Topping station", "You can collect some sprinkles here", null,6,3,5,"sprinkle")) // 4
         locationList.add(Location("Soft-serve machine room", "You can collect soft-serve here",null,4,null,null, "soft serve")) // 5
         locationList.add(Location("Cookies cupboard", "You can collect cookies here", 7,null,null,4,"cookie")) // 6
         locationList.add(Location("Dish room", "You can collect boat here", null,null,6,null,"boat")) // 7
         locationList.add(Location("Paper cupboard", "You can collect paper cup here", null,11,9,0,"paper cup")) // 8
-        locationList.add(Location("Cone room", "You can collect cones here", 8,null,10,null, "cone")) //9
-        locationList.add(Location("Candy storage", "You can collect candies here",8,null,10,null,"gummy bear")) //10
+        locationList.add(Location("Cone room", "You can collect cones here", 8,13,10,null, "cone")) //9
+        locationList.add(Location("Candy storage", "You can collect candies here",9,13,null,null,"gummy bear")) //10
         locationList.add(Location("Sauce fountain", "You can put sauces on in here", 12,null,null,8, "strawberry sauce")) //11
         locationList.add(Location("Dairy fridge", "You can collect dairy stuff here", null,null,11,null,"whip cream")) //12
+        locationList.add(Location("Nuts cupboard", "You can collect almonds here",null,null,null,10, "almonds"))
     }
 
-
-
     fun moveNorth() {
-        if (locationList[currentLocation].north != null)
+        if (locationList[currentLocation].north != null) //If there is  location in that direction then move to that location
             currentLocation = locationList[currentLocation].north!!
     }
 
@@ -97,6 +97,39 @@ class App() {
             currentLocation = locationList[currentLocation].west!!
     }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    val recipes = mutableListOf<List<String>>()
+
+    // Recipes for ice cream orders
+    var recipe1 = listOf("cone", "ice cream", "gummy bear", "strawberry sauce")
+    var recipe2 = listOf("paper cup", "ice cream", "whip cream", "sprinkle")
+    var recipe3 = listOf("cone", "soft serve", "cherry")
+
+    init {
+        recipes.add(recipe1)
+        recipes.add(recipe2)
+        recipes.add(recipe3)
+    }
+
+    // Recipes for an order will be randomised
+    var recipesTodo = recipes.random()
+
+    fun recipeOrder(){
+        for (item in recipesTodo) {
+            var currentItem = 0 //Then like if the string of the item in the recipe matches the string of the item in that location, then currentItem +1 and if currentItem = size of the recipe then win
+
+            if (item == locationList[currentLocation].itemName) {
+                currentItem++
+            }else if (currentItem == recipesTodo.size - 1){
+                //win
+            }else {
+                currentItem = 0
+            }
+
+
+        }
+    }
 
 
 }
@@ -120,8 +153,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var westButton: JButton
     private lateinit var currentLabel: JLabel
     private lateinit var currentDescriptionLabel: JLabel
-    private lateinit var recipeLabel: JLabel
-    private lateinit var warningLabel: JLabel
+    private lateinit var item1Label: JLabel
 
     /**
      * Configure the UI and display it
@@ -203,15 +235,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         currentDescriptionLabel.foreground = Color.white
         add(currentDescriptionLabel)
 
-        recipeLabel = JLabel("Recipe for ...")
-        recipeLabel.bounds = Rectangle(30, 110, 200,200)
-        recipeLabel.font = Font(Font.SANS_SERIF,Font.PLAIN, 12)
-        recipeLabel.horizontalAlignment = SwingConstants.CENTER
-        recipeLabel.verticalAlignment = SwingConstants.TOP
-        recipeLabel.foreground = Color.white
-        recipeLabel.border = BorderFactory.createRaisedSoftBevelBorder()
-        recipeLabel.background = Color.white
-        add(recipeLabel)
+
 
 
 //        warningLabel = JLabel("Warning: No location in this direction")
