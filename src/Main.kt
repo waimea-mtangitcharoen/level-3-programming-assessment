@@ -17,7 +17,6 @@ import com.formdev.flatlaf.FlatDarkLaf
 import java.awt.*
 import java.awt.event.*
 import javax.swing.*
-import javax.swing.border.Border
 
 
 /**
@@ -62,19 +61,19 @@ class App() {
     // Create location and define the connection
     fun setupMap() {
         locationList.add(Location("Counter", "This is where your order will be placed.", 1, 8, null, null,""))  // 0
-        locationList.add(Location("Fridge", "You can collect ice cream from here", null, 2,0,null, "ice cream")) // 1
-        locationList.add(Location("Chocolate room", "You can collect chocolates from here", 3,null,null,1, "chocolate")) // 2
-        locationList.add(Location("Fruit bar", "You can collect fruits here",4,null,2,null, "cherry")) // 3
-        locationList.add(Location("Topping station", "You can collect some sprinkles here", null,6,3,5,"sprinkle")) // 4
-        locationList.add(Location("Soft-serve machine room", "You can collect soft-serve here",null,4,null,null, "soft serve")) // 5
-        locationList.add(Location("Cookies cupboard", "You can collect cookies here", 7,null,null,4,"cookie")) // 6
-        locationList.add(Location("Dish room", "You can collect boat here", null,null,6,null,"boat")) // 7
-        locationList.add(Location("Paper cupboard", "You can collect paper cup here", null,11,9,0,"paper cup")) // 8
-        locationList.add(Location("Cone room", "You can collect cones here", 8,13,10,null, "cone")) //9
-        locationList.add(Location("Candy storage", "You can collect candies here",9,13,null,null,"gummy bear")) //10
-        locationList.add(Location("Sauce fountain", "You can put sauces on in here", 12,null,null,8, "strawberry sauce")) //11
-        locationList.add(Location("Dairy fridge", "You can collect dairy stuff here", null,null,11,null,"whip cream")) //12
-        locationList.add(Location("Nuts cupboard", "You can collect almonds here",null,null,null,10, "almonds"))
+        locationList.add(Location("Fridge", "You can collect ice cream from here", null, 2,0,null, "Ice cream")) // 1
+        locationList.add(Location("Chocolate room", "You can collect chocolates from here", 3,null,null,1, "Chocolate")) // 2
+        locationList.add(Location("Fruit bar", "You can collect fruits here",4,null,2,null, "Cherry")) // 3
+        locationList.add(Location("Topping station", "You can collect some sprinkles here", null,6,3,5,"Sprinkle")) // 4
+        locationList.add(Location("Soft-serve machine room", "You can collect soft-serve here",null,4,null,null, "Soft serve")) // 5
+        locationList.add(Location("Cookies cupboard", "You can collect cookies here", 7,null,null,4,"Cookie")) // 6
+        locationList.add(Location("Dish room", "You can collect boat here", null,null,6,null,"Boat")) // 7
+        locationList.add(Location("Paper cupboard", "You can collect paper cup here", null,11,9,0,"Paper cup")) // 8
+        locationList.add(Location("Cone room", "You can collect cones here", 8,13,10,null, "Cone")) //9
+        locationList.add(Location("Candy storage", "You can collect candies here",9,13,null,null,"Gummy bear")) //10
+        locationList.add(Location("Sauce fountain", "You can put sauces on in here", 12,null,null,8, "Strawberry sauce")) //11
+        locationList.add(Location("Dairy fridge", "You can collect dairy stuff here", null,null,11,null,"Whip cream")) //12
+        locationList.add(Location("Nuts cupboard", "You can collect almonds here",null,null,null,10, "Almonds"))
     }
 
     fun moveNorth() {
@@ -102,9 +101,9 @@ class App() {
     val recipes = mutableListOf<List<String>>()
 
     // Recipes for ice cream orders
-    var recipe1 = listOf("cone", "ice cream", "gummy bear", "strawberry sauce")
-    var recipe2 = listOf("paper cup", "ice cream", "whip cream", "sprinkle")
-    var recipe3 = listOf("cone", "soft serve", "cherry")
+    var recipe1 = listOf("Cone", "Ice cream", "Gummy bear", "Strawberry sauce")
+    var recipe2 = listOf("Paper cup", "Ice cream", "Whip cream", "Sprinkle")
+    var recipe3 = listOf("Cone", "Soft serve", "Cherry")
 
     init {
         recipes.add(recipe1)
@@ -113,22 +112,32 @@ class App() {
     }
 
     // Recipes for an order will be randomised
-    var recipesTodo = recipes.random()
+    var currentRecipe = recipes.random()
 
-    fun recipeOrder(){
-        for (item in recipesTodo) {
-            var currentItem = 0 //Then like if the string of the item in the recipe matches the string of the item in that location, then currentItem +1 and if currentItem = size of the recipe then win
+    // Tracks the item we are looking for within the recipe
+    var currentItem = 0
 
-            if (item == locationList[currentLocation].itemName) {
-                currentItem++
-            }else if (currentItem == recipesTodo.size - 1){
-                //win
-            }else {
-                currentItem = 0
-            }
+    fun checkIfRoomHasItem(): Boolean {
+        return currentRecipe[currentItem] == locationList[currentLocation].itemName
+    }
 
-
+    // Will return True if recipe complete
+    fun moveOnToNextItem(): Boolean {
+        currentItem++
+        if (currentItem == currentRecipe.size) {
+            getNewRecipe()
+            return true
         }
+        else {
+            return false
+        }
+
+    }
+
+    fun getNewRecipe() {
+        currentLocation = 0
+        currentRecipe = recipes.random()
+        currentItem = 0
     }
 
 
@@ -154,6 +163,10 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var currentLabel: JLabel
     private lateinit var currentDescriptionLabel: JLabel
     private lateinit var item1Label: JLabel
+    private lateinit var item2Label: JLabel
+    private lateinit var item3Label: JLabel
+    private lateinit var item4Label: JLabel
+    private lateinit var item5Label: JLabel
 
     /**
      * Configure the UI and display it
@@ -235,27 +248,31 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         currentDescriptionLabel.foreground = Color.white
         add(currentDescriptionLabel)
 
+        item1Label = JLabel("ITEM 1")
+        item1Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
+        item1Label.bounds = Rectangle(30,120,250,50)
+        add(item1Label)
 
+        item2Label = JLabel("ITEM 2")
+        item2Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
+        item2Label.bounds = Rectangle(30,150,250,50)
+        add(item2Label)
 
+        item3Label = JLabel("ITEM 3")
+        item3Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
+        item3Label.bounds = Rectangle(30,180,250,50)
+        add(item3Label)
 
-//        warningLabel = JLabel("Warning: No location in this direction")
-//        warningLabel.bounds = Rectangle(335,40, 200,200)
-//        warningLabel.foreground = Color.red
-//        warningLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-//        add(warningLabel)
+        item4Label = JLabel("ITEM 4")
+        item4Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
+        item4Label.bounds = Rectangle(30,210,250,50)
+        add(item4Label)
 
+        item5Label = JLabel("ITEM 5")
+        item5Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
+        item5Label.bounds = Rectangle(30,240,250,50)
+        add(item5Label)
 
-//        clicksLabel = JLabel("CLICK INFO HERE")
-//        clicksLabel.horizontalAlignment = SwingConstants.CENTER
-//        clicksLabel.bounds = Rectangle(50, 50, 500, 100)
-//        clicksLabel.font = baseFont
-//        add(clicksLabel)
-
-//        clickButton = JButton("Click Me!")
-//        clickButton.bounds = Rectangle(50,200,500,100)
-//        clickButton.font = baseFont
-//        clickButton.addActionListener(this)     // Handle any clicks
-//        add(clickButton)
 
 
     }
@@ -268,16 +285,30 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     fun updateView() {
 
         currentLabel.text = app.locationList[app.currentLocation].name
-        currentDescriptionLabel.text = app.locationList[app.currentLocation].description
+        currentDescriptionLabel.text = if (app.checkIfRoomHasItem()) "You have found your ${app.locationList[app.currentLocation].itemName}!" else app.locationList[app.currentLocation].description
+        currentDescriptionLabel.foreground = if (app.checkIfRoomHasItem()) Color.GREEN else Color.WHITE
 
-//        if (app.clicks == app.MAX_CLICKS) {
-//            clicksLabel.text = "Max clicks reached!"
-//            clickButton.isEnabled = false
-//        }
-//        else {
-//            clicksLabel.text = "You clicked ${app.clicks} times"
-//            clickButton.isEnabled = true
-//        }
+        // Have we found our current item?
+        if (app.checkIfRoomHasItem()) {
+            app.moveOnToNextItem()
+        }
+
+
+        item1Label.text = if (app.currentRecipe.size > 0) app.currentRecipe[0] else ""
+        item1Label.foreground = if (app.currentItem > 0) Color.GREEN else Color.WHITE
+
+        item2Label.text = if (app.currentRecipe.size > 1) app.currentRecipe[1] else ""
+        item2Label.foreground = if (app.currentItem > 1) Color.GREEN else Color.WHITE
+
+        item3Label.text = if (app.currentRecipe.size > 2) app.currentRecipe[2] else ""
+        item3Label.foreground = if (app.currentItem > 2) Color.GREEN else Color.WHITE
+
+        item4Label.text = if (app.currentRecipe.size > 3) app.currentRecipe[3] else ""
+        item4Label.foreground = if (app.currentItem > 3) Color.GREEN else Color.WHITE
+
+        item5Label.text = if (app.currentItem > 4) app.currentRecipe[4] else ""
+        item5Label.foreground = if (app.currentItem > 5) Color.GREEN else Color.WHITE
+
     }
 
     /**

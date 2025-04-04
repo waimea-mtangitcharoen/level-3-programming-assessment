@@ -9,10 +9,73 @@ Terminology:
 - **INVALID** data values are those that the program should reject
 
 ---
+## Starter
+
+The player should start at the counter.
+
+## Test data used
+
+The current location of the player at the start of the game.
+
+## Expected Test Result
+
+The player should see "Counter" at the start of the game.
+
+## Movement check
+### Move north
+
+Check whether the player has moved north.
+
+### Test data used
+
+Clicking the north button and the game map
+
+### Expected result
+
+After the player clicks the north button, the current location display should be the location in the north direction.
+
+### Move east
+
+Check whether the player has moved east.
+
+### Test data used
+
+The input of clicking "▶" button and the game map
+
+### Expected result
+
+After clicking "▶" button, the location display is changed to the location on the east.
+
+### Move south
+
+Check whether the player has moved south.
+
+### Test data used
+
+Clicking the south button and the game map.
+
+### Expected result
+
+After clicking the south button, the location display is changed to the location on the south.
+
+### Move west
+
+Check whether the player has moved west
+
+### Test data used
+
+Clicking the west button and the game map.
+
+### Expected result
+
+After clicking the west button, the location display is changed to the location on the west.
+
+[//]: # (-------------------------------------------------------------------------------------------------------------------------------)
+
 
 ## Out of bound check
 
-Check whether the player is attempting to move out of bound or not (somewhere on the map that does not exist)
+Check whether the player is attempting to move out of bound or not (somewhere on the map that does not exist).
 
 ### Test Data To Use
 
