@@ -88,17 +88,19 @@ Otherwise, the player should be able to move freely.
 
 ---
 
-## Example Test Name
+## Recipe check
 
-Example test description. Example test description. Example test description. Example test description. Example test description. Example test description.
+### Showing recipe
+
+A recipe, which has a list of ingredients a player is required to collected is shown.
 
 ### Test Data To Use
 
-Details of test data and reasons for selection. Details of test data and reasons for selection. Details of test data and reasons for selection.
+Adding a recipe to the program
 
 ### Expected Test Result
 
-Statement detailing what should happen. Statement detailing what should happen. Statement detailing what should happen. Statement detailing what should happen.
+A list of things need for the recipe will be shown on the left of the interface.
 
 ---
 

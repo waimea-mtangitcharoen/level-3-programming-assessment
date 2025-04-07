@@ -155,7 +155,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var clicksLabel: JLabel
     private lateinit var clickButton: JButton
     private lateinit var instructionLabel: JLabel
-    private lateinit var instructionButton: JButton
+    private lateinit var HowToPlayButton: JButton
     private lateinit var northButton: JButton
     private lateinit var southButton: JButton
     private lateinit var eastButton: JButton
@@ -167,6 +167,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var item3Label: JLabel
     private lateinit var item4Label: JLabel
     private lateinit var item5Label: JLabel
+
+    private lateinit var HowToPlayPopUp: HowToPlayDialogue
 
     /**
      * Configure the UI and display it
@@ -201,18 +203,20 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private fun addControls() {
         val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 36)
 
+        HowToPlayPopUp = HowToPlayDialogue()
+
         instructionLabel = JLabel("<html><strong> Welcome to Sweet Sundae!")
         instructionLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
         instructionLabel.bounds = Rectangle(30,20,250,50)
         add(instructionLabel)
 
-        instructionButton = JButton("How to play")
-        instructionButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-        instructionButton.foreground = Color.black
-        instructionButton.background = Color(197, 231, 237)
-        instructionButton.bounds = Rectangle(30,65,100,20)
-        instructionButton.addActionListener(this)
-        add(instructionButton)
+        HowToPlayButton = JButton("How to play")
+        HowToPlayButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        HowToPlayButton.foreground = Color.black
+        HowToPlayButton.background = Color(197, 231, 237)
+        HowToPlayButton.bounds = Rectangle(30,65,100,20)
+        HowToPlayButton.addActionListener(this)
+        add(HowToPlayButton)
 
         northButton = JButton("▲")
         northButton.bounds = Rectangle(400,180,60,60)
@@ -311,6 +315,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
 
     }
 
+
     /**
      * Handle any UI events (e.g. button clicks)
      * Usually this involves updating the application model
@@ -337,12 +342,52 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
                   app.moveWest()
                   updateView()
               }
-//            clickButton -> {
-//                app.updateClickCount()
-//                updateView()
-//            }
+
+              HowToPlayButton ->{
+                  HowToPlayPopUp.isVisible = true
+              }
+
         }
     }
 
 }
+
+class HowToPlayDialogue(): JDialog() {
+    /**
+     * Configure the UI
+     */
+    init {
+        configureWindow()
+        addControls()
+        setLocationRelativeTo(null)     // Centre the window
+    }
+
+    /**
+     * Setup the dialog window
+     */
+    private fun configureWindow() {
+        title = "How to Play"
+        contentPane.preferredSize = Dimension(450, 300)
+        isResizable = false
+        isModal = true
+        layout = null
+        pack()
+    }
+
+    /**
+     * Populate the window with controls
+     */
+    private fun addControls() {
+        val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 11)
+
+        // Adding <html> to the label text allows it to wrap
+        val message = JLabel("<html> <strong> How to play? </strong> The game is very simple! All you need to do is collect the things you need for the recipe shown on the left. Here's a brief tips and instruction for you:<br><br> 1. Use the buttons below to move around the map and be sure to remember where you are going! <br><br> 2. Collect the things you need, and once you have collected it, that ingredient will turn green <br><br> 3. Use your time WISELY! Otherwise you will fail to complete the order. ")
+        message.bounds = Rectangle(80, 10, 350, 250)
+        message.horizontalAlignment = SwingConstants.CENTER
+        message.font = baseFont
+        add(message)
+    }
+}
+
+
 
