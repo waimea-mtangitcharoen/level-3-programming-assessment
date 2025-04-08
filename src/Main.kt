@@ -139,6 +139,14 @@ class App() {
         currentRecipe = recipes.random()
         currentItem = 0
     }
+//   ----------------------------------------------------------------------------------------
+
+    var message = "TICK"
+
+    // Application logic functions
+    fun updateMessage() {
+        message = if (message == "TICK") "TOCK" else "TICK"
+    }
 
 
 }
