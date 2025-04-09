@@ -50,6 +50,7 @@ class Location(
  * stored, plus any application logic functions
  */
 class App() {
+    val TIME_LIMIT = 90
 
     val locationList = mutableListOf<Location>()
     var currentLocation = 0
@@ -141,11 +142,11 @@ class App() {
     }
 //   ----------------------------------------------------------------------------------------
 
-    var message = "TICK"
+    var message = "0.00"
 
     // Application logic functions
     fun updateMessage() {
-        message = if (message == "TICK") "TOCK" else "TICK"
+        message = if (message == "0.00") "TOCK" else "0.00"
     }
 
 
@@ -164,6 +165,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var clickButton: JButton
     private lateinit var instructionLabel: JLabel
     private lateinit var HowToPlayButton: JButton
+    private lateinit var playButton: JButton
     private lateinit var northButton: JButton
     private lateinit var southButton: JButton
     private lateinit var eastButton: JButton
@@ -175,8 +177,14 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var item3Label: JLabel
     private lateinit var item4Label: JLabel
     private lateinit var item5Label: JLabel
+    private lateinit var timerLabel: JLabel
+
+
 
     private lateinit var HowToPlayPopUp: HowToPlayDialogue
+    private lateinit var demoTimer: Timer
+
+    var time: Int = 0
 
     /**
      * Configure the UI and display it
@@ -225,6 +233,14 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         HowToPlayButton.bounds = Rectangle(30,65,100,20)
         HowToPlayButton.addActionListener(this)
         add(HowToPlayButton)
+
+        playButton = JButton("Play")
+        playButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        playButton.foreground = Color.black
+        playButton.background = Color(91, 199, 195)
+        playButton.bounds = Rectangle(30,90,100,20)
+        playButton.addActionListener(this)
+        add(playButton)
 
         northButton = JButton("▲")
         northButton.bounds = Rectangle(400,180,60,60)
@@ -285,6 +301,14 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         item5Label.bounds = Rectangle(30,240,250,50)
         add(item5Label)
 
+        timerLabel = JLabel("0.00")
+        timerLabel.foreground = Color.white
+        timerLabel.bounds = Rectangle(150,60,250,50)
+        add(timerLabel)
+
+
+        demoTimer = Timer(1000,this)
+
 
 
     }
@@ -297,14 +321,17 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     fun updateView() {
 
         currentLabel.text = app.locationList[app.currentLocation].name
-        currentDescriptionLabel.text = if (app.checkIfRoomHasItem()) "You have found your ${app.locationList[app.currentLocation].itemName}!" else app.locationList[app.currentLocation].description
+        currentDescriptionLabel.text = if (app.checkIfRoomHasItem()) {
+            "${app.locationList[app.currentLocation].description}\n\nYou have found your ${app.locationList[app.currentLocation].itemName}!"
+        } else {
+            app.locationList[app.currentLocation].description
+        }
         currentDescriptionLabel.foreground = if (app.checkIfRoomHasItem()) Color.GREEN else Color.WHITE
 
         // Have we found our current item?
         if (app.checkIfRoomHasItem()) {
             app.moveOnToNextItem()
         }
-
 
         item1Label.text = if (app.currentRecipe.size > 0) app.currentRecipe[0] else ""
         item1Label.foreground = if (app.currentItem > 0) Color.GREEN else Color.WHITE
@@ -321,6 +348,14 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         item5Label.text = if (app.currentItem > 4) app.currentRecipe[4] else ""
         item5Label.foreground = if (app.currentItem > 5) Color.GREEN else Color.WHITE
 
+        timerLabel.text = time.toString()
+
+        if (demoTimer.isRunning) {
+            northButton.isEnabled = true
+        }
+        else {
+            northButton.isEnabled = false
+        }
     }
 
 
@@ -355,6 +390,21 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
                   HowToPlayPopUp.isVisible = true
               }
 
+              playButton ->{
+                  time = app.TIME_LIMIT
+                  demoTimer.start()
+                  updateView()
+              }
+
+            demoTimer -> {
+                time--
+
+                if (time == 0) {
+                    demoTimer.stop()
+                }
+
+                updateView()
+            }
         }
     }
 
@@ -390,12 +440,14 @@ class HowToPlayDialogue(): JDialog() {
 
         // Adding <html> to the label text allows it to wrap
         val message = JLabel("<html> <strong> How to play? </strong> The game is very simple! All you need to do is collect the things you need for the recipe shown on the left. Here's a brief tips and instruction for you:<br><br> 1. Use the buttons below to move around the map and be sure to remember where you are going! <br><br> 2. Collect the things you need, and once you have collected it, that ingredient will turn green <br><br> 3. Use your time WISELY! Otherwise you will fail to complete the order. ")
-        message.bounds = Rectangle(80, 10, 350, 250)
+        message.bounds = Rectangle(50, 10, 350, 250)
         message.horizontalAlignment = SwingConstants.CENTER
         message.font = baseFont
         add(message)
     }
 }
+
+
 
 
 
