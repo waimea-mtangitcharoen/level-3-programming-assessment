@@ -50,7 +50,7 @@ class Location(
  * stored, plus any application logic functions
  */
 class App() {
-    val TIME_LIMIT = 90
+    val TIME_LIMIT = 120
 
     val locationList = mutableListOf<Location>()
     var currentLocation = 0
@@ -135,19 +135,14 @@ class App() {
 
     }
 
-    fun getNewRecipe() {
+    fun getNewRecipe(): Boolean {
         currentLocation = 0
         currentRecipe = recipes.random()
         currentItem = 0
+        return true
     }
 //   ----------------------------------------------------------------------------------------
 
-    var message = "0.00"
-
-    // Application logic functions
-    fun updateMessage() {
-        message = if (message == "0.00") "TOCK" else "0.00"
-    }
 
 
 }
@@ -184,8 +179,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var HowToPlayPopUp: HowToPlayDialogue
     private lateinit var demoTimer: Timer
 
-    var time: Int = 0
 
+    var time: Int = 0
     /**
      * Configure the UI and display it
      */
@@ -351,11 +346,23 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         timerLabel.text = time.toString()
 
         if (demoTimer.isRunning) {
+            playButton.isEnabled  = false
             northButton.isEnabled = true
+            eastButton.isEnabled  = true
+            southButton.isEnabled = true
+            westButton.isEnabled  = true
         }
         else {
+            playButton.isEnabled  = true
             northButton.isEnabled = false
+            eastButton.isEnabled  = false
+            southButton.isEnabled = false
+            westButton.isEnabled  = false
         }
+
+
+
+
     }
 
 
@@ -398,11 +405,9 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
 
             demoTimer -> {
                 time--
-
                 if (time == 0) {
                     demoTimer.stop()
                 }
-
                 updateView()
             }
         }
@@ -439,7 +444,7 @@ class HowToPlayDialogue(): JDialog() {
         val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 11)
 
         // Adding <html> to the label text allows it to wrap
-        val message = JLabel("<html> <strong> How to play? </strong> The game is very simple! All you need to do is collect the things you need for the recipe shown on the left. Here's a brief tips and instruction for you:<br><br> 1. Use the buttons below to move around the map and be sure to remember where you are going! <br><br> 2. Collect the things you need, and once you have collected it, that ingredient will turn green <br><br> 3. Use your time WISELY! Otherwise you will fail to complete the order. ")
+        val message = JLabel("<html> <strong> How to play? </strong> You are now working at the Sunnyville ice cream shop and it can get very popular during the summer. So your job, is to complete those ice cream orders and that is very simple. All you need to do is collect the things you need for the recipe shown on the left. Here's a brief tips and instruction for you:<br><br> 1. Use the buttons below to move around the map and be sure to remember where you are going! <br><br> 2. Collect the things you need, and once you have collected it, that ingredient will turn green <br><br> 3. Use your time WISELY! Otherwise you will fail to complete the order. ")
         message.bounds = Rectangle(50, 10, 350, 250)
         message.horizontalAlignment = SwingConstants.CENTER
         message.font = baseFont
