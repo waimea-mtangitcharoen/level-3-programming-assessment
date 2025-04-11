@@ -9,35 +9,35 @@ This checklist can be used to gauge progress towards different levels of success
 ### Program Functionality
 
 The game functions correctly and meets the specification:
-- [ ] The game is **playable**
-- [ ] The game has a **GUI** with a range of controls
-- [ ] The **instructions** for the game are available via the GUI
-- [ ] Player provides game **inputs via the GUI** (e.g. moves, actions)
-- [ ] The **current status** of the game is **shown in the GUI**, updated each player input
-- [ ] The game is based on a **non-trivial map**
-- [ ] The player can **move between locations**
-- [ ] The player has a **clear purpose** they can attempt to achieve
+- [x] The game is **playable**
+- [ ] The game has a **GUI** with a range of controls (still need key listener)
+- [x] The **instructions** for the game are available via the GUI
+- [x] Player provides game **inputs via the GUI** (e.g. moves, actions)
+- [x] The **current status** of the game is **shown in the GUI**, updated each player input
+- [ ] The game is based on a **non-trivial map** (ask people whether the map is too small or not)
+- [x] The player can **move between locations**
+- [x] The player has a **clear purpose** they can attempt to achieve
 - [ ] A **win / end / loss state** is possible
 
 ### Program Code
 
 The program stores data using:
-- [ ] **Variables** of at least two types (e.g. int, text, boolean)
+- [x] **Variables** of at least two types (e.g. int, text, boolean)
 
 The program structure:
-- [ ] Defines and implements a **graphical user interface (GUI)**
-- [ ] Makes use of user-defined OOP **classes** from which **objects** are instantiated
-- [ ] Uses **functions** / **methods** to break up the code logically
+- [x] Defines and implements a **graphical user interface (GUI)**
+- [x] Makes use of user-defined OOP **classes** from which **objects** are instantiated
+- [x] Uses **functions** / **methods** to break up the code logically
 - [ ] Contains **sequences** of instructions
-- [ ] Uses **conditional** instructions to control the program flow
-- [ ] Uses program **branches** (if...else, when, etc.)
+- [x] Uses **conditional** instructions to control the program flow
+- [x] Uses program **branches** (if...else, when, etc.)
 - [ ] Uses **iteration** (loops) to repeat things (for, while, etc.)
 
 ### Program Documentation
 
 The program code:
 - [ ] Is **indented** correctly
-- [ ] Is **laid-out clearly**
+- [ ] Is **laid-out clearly**  not yet
 - [ ] Contains **comments** that help in understanding how it works
 
 ### Program Testing
@@ -80,7 +80,7 @@ The program uses functions appropriately, where:
 ### Game GUI
 
 The game GUI:
-- [ ] Adheres to **common conventions** (e.g. buttons look like buttons, etc.)
+- [x] Adheres to **common conventions** (e.g. buttons look like buttons, etc.)
 
 ### Program Documentation
 
@@ -121,7 +121,7 @@ Program flexibility and maintainability is aided by good program structure:
 
 The game GUI:
 - [ ] Is **well laid out** with care and attention paid to details
-- [ ] Gives a **good uer experience (UX)**
+- [ ] Gives a **good user experience (UX)**
 
 ### Program Documentation
 

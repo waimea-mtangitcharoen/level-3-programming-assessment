@@ -1,5 +1,4 @@
-# PROJECT NAME HERE
-
+# Sweet Sundae
 by Chittranuch Tangitcharoen (Mimi)
 
 ---

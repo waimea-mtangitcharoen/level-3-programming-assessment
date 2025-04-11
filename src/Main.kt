@@ -16,6 +16,8 @@
 import com.formdev.flatlaf.FlatDarkLaf
 import java.awt.*
 import java.awt.event.*
+import javax.sound.sampled.AudioSystem
+import javax.sound.sampled.Clip
 import javax.swing.*
 
 
@@ -50,14 +52,62 @@ class Location(
  * stored, plus any application logic functions
  */
 class App() {
-    val TIME_LIMIT = 120
+    val INITIAL_TIME_LIMIT = 120
+    val TIME_LIMIT_ADJUST = 0.8
+    var timeLimit = INITIAL_TIME_LIMIT
+
+    val ITEM_SCORE = 10
+    val RECIPE_SCORE = 100
 
     val locationList = mutableListOf<Location>()
     var currentLocation = 0
 
+    val recipes = mutableListOf<List<String>>()
+
+    private lateinit var bellSound: Clip
+
+    // Recipes for ice cream orders
+    var recipe1 = listOf("Cone", "Ice cream", "Gummy bear", "Strawberry sauce")
+    var recipe2 = listOf("Paper cup", "Ice cream", "Whip cream", "Sprinkle")
+    var recipe3 = listOf("Cone", "Soft serve", "Cherry")
+
+    // Recipes for an order will be randomised
+    var currentRecipe: List<String>
+
+    // Tracks the item we are looking for within the recipe
+    var currentItem = 0
+
+    var score = 0
+
+
     init {
         setupMap()
+
+        recipes.add(recipe1)
+        recipes.add(recipe2)
+        recipes.add(recipe3)
+
+        currentRecipe = recipes.random()
     }
+
+    fun resetGame() {
+        timeLimit = INITIAL_TIME_LIMIT
+        currentRecipe = recipes.random()
+        currentItem = 0
+        currentLocation = 0
+        score = 0
+    }
+
+
+
+    fun playSound(file: String) {
+        val soundFile = this::class.java.getResourceAsStream("sounds/$file.wav")
+        val soundStream = AudioSystem.getAudioInputStream(soundFile)
+        val soundClip = AudioSystem.getClip()
+        soundClip.open(soundStream)
+        soundClip.start()
+    }
+
 
     // Create location and define the connection
     fun setupMap() {
@@ -97,29 +147,13 @@ class App() {
             currentLocation = locationList[currentLocation].west!!
     }
 
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    val recipes = mutableListOf<List<String>>()
-
-    // Recipes for ice cream orders
-    var recipe1 = listOf("Cone", "Ice cream", "Gummy bear", "Strawberry sauce")
-    var recipe2 = listOf("Paper cup", "Ice cream", "Whip cream", "Sprinkle")
-    var recipe3 = listOf("Cone", "Soft serve", "Cherry")
-
-    init {
-        recipes.add(recipe1)
-        recipes.add(recipe2)
-        recipes.add(recipe3)
-    }
-
-    // Recipes for an order will be randomised
-    var currentRecipe = recipes.random()
-
-    // Tracks the item we are looking for within the recipe
-    var currentItem = 0
-
     fun checkIfRoomHasItem(): Boolean {
-        return currentRecipe[currentItem] == locationList[currentLocation].itemName
+        if (currentRecipe[currentItem] == locationList[currentLocation].itemName) {
+            playSound("bell")
+            score += ITEM_SCORE
+            return true
+        }
+        return false
     }
 
     // Will return True if recipe complete
@@ -127,6 +161,7 @@ class App() {
         currentItem++
         if (currentItem == currentRecipe.size) {
             getNewRecipe()
+            score += RECIPE_SCORE
             return true
         }
         else {
@@ -135,14 +170,23 @@ class App() {
 
     }
 
-    fun getNewRecipe(): Boolean {
+    fun getNewRecipe() {
         currentLocation = 0
         currentRecipe = recipes.random()
         currentItem = 0
-        return true
+
+        // Adjust time to speed up the next challenge
+        timeLimit = (timeLimit * TIME_LIMIT_ADJUST).toInt()
     }
 //   ----------------------------------------------------------------------------------------
 
+    var currentLevel = 1
+
+    fun updateLevel() {
+        if (currentItem == currentRecipe.size) {
+            currentLevel++
+        }
+    }
 
 
 }
@@ -173,11 +217,13 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var item4Label: JLabel
     private lateinit var item5Label: JLabel
     private lateinit var timerLabel: JLabel
+    private lateinit var levelLabel: JLabel
 
 
 
     private lateinit var HowToPlayPopUp: HowToPlayDialogue
     private lateinit var demoTimer: Timer
+
 
 
     var time: Int = 0
@@ -207,6 +253,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
 
         pack()
     }
+
 
     /**
      * Populate the UI with UI controls
@@ -301,6 +348,11 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         timerLabel.bounds = Rectangle(150,60,250,50)
         add(timerLabel)
 
+        levelLabel = JLabel("Level")
+        levelLabel.foreground = Color.white
+        levelLabel.bounds = Rectangle(200,60,250,50)
+        add(levelLabel)
+
 
         demoTimer = Timer(1000,this)
 
@@ -315,17 +367,26 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
      */
     fun updateView() {
 
+        // Have we found the thing we are looking for?
+        val foundItem = app.checkIfRoomHasItem()
+
         currentLabel.text = app.locationList[app.currentLocation].name
-        currentDescriptionLabel.text = if (app.checkIfRoomHasItem()) {
+
+        currentDescriptionLabel.text = if (foundItem) {
             "${app.locationList[app.currentLocation].description}\n\nYou have found your ${app.locationList[app.currentLocation].itemName}!"
         } else {
             app.locationList[app.currentLocation].description
         }
-        currentDescriptionLabel.foreground = if (app.checkIfRoomHasItem()) Color.GREEN else Color.WHITE
+        currentDescriptionLabel.foreground = if (foundItem) Color.GREEN else Color.WHITE
 
         // Have we found our current item?
-        if (app.checkIfRoomHasItem()) {
-            app.moveOnToNextItem()
+        if (foundItem) {
+            val recipeComplete = app.moveOnToNextItem()
+
+            // New recipe, so reset timer
+            if (recipeComplete) {
+                time = app.timeLimit
+            }
         }
 
         item1Label.text = if (app.currentRecipe.size > 0) app.currentRecipe[0] else ""
@@ -342,8 +403,6 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
 
         item5Label.text = if (app.currentItem > 4) app.currentRecipe[4] else ""
         item5Label.foreground = if (app.currentItem > 5) Color.GREEN else Color.WHITE
-
-        timerLabel.text = time.toString()
 
         if (demoTimer.isRunning) {
             playButton.isEnabled  = false
@@ -398,22 +457,25 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
               }
 
               playButton ->{
-                  time = app.TIME_LIMIT
+                  time = app.timeLimit
                   demoTimer.start()
                   updateView()
               }
 
             demoTimer -> {
                 time--
+
+                timerLabel.text = time.toString()
+
                 if (time == 0) {
                     demoTimer.stop()
                 }
-                updateView()
             }
         }
     }
 
 }
+
 
 class HowToPlayDialogue(): JDialog() {
     /**
