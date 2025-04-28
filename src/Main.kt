@@ -52,7 +52,7 @@ class Location(
  * stored, plus any application logic functions
  */
 class App() {
-    val INITIAL_TIME_LIMIT = 120
+    val INITIAL_TIME_LIMIT = 5
     val TIME_LIMIT_ADJUST = 0.8
     var timeLimit = INITIAL_TIME_LIMIT
 
@@ -118,13 +118,13 @@ class App() {
         locationList.add(Location("Topping station", "You can collect some sprinkles here", null,6,3,5,"Sprinkle")) // 4
         locationList.add(Location("Soft-serve machine room", "You can collect soft-serve here",null,4,null,null, "Soft serve")) // 5
         locationList.add(Location("Cookies cupboard", "You can collect cookies here", 7,null,null,4,"Cookie")) // 6
-        locationList.add(Location("Dish room", "You can collect boat here", null,null,6,null,"Boat")) // 7
+        locationList.add(Location("Dish washer", "You can collect boat here", null,null,6,null,"Boat")) // 7
         locationList.add(Location("Paper cupboard", "You can collect paper cup here", null,11,9,0,"Paper cup")) // 8
         locationList.add(Location("Cone room", "You can collect cones here", 8,13,10,null, "Cone")) //9
         locationList.add(Location("Candy storage", "You can collect candies here",9,13,null,null,"Gummy bear")) //10
         locationList.add(Location("Sauce fountain", "You can put sauces on in here", 12,null,null,8, "Strawberry sauce")) //11
         locationList.add(Location("Dairy fridge", "You can collect dairy stuff here", null,null,11,null,"Whip cream")) //12
-        locationList.add(Location("Nuts cupboard", "You can collect almonds here",null,null,null,10, "Almonds"))
+        locationList.add(Location("Nuts cupboard", "You can collect almonds here",null,null,null,10, "Almonds"))//13
     }
 
     fun moveNorth() {
@@ -171,7 +171,7 @@ class App() {
     }
 
     fun getNewRecipe() {
-        currentLocation = 0
+//        currentLocation = 0
         currentRecipe = recipes.random()
         currentItem = 0
 
@@ -202,7 +202,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     // Fields to hold the UI elements
     private lateinit var clicksLabel: JLabel
     private lateinit var clickButton: JButton
-    private lateinit var instructionLabel: JLabel
+    private lateinit var titleLabel: JLabel
     private lateinit var HowToPlayButton: JButton
     private lateinit var playButton: JButton
     private lateinit var northButton: JButton
@@ -218,10 +218,12 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var item5Label: JLabel
     private lateinit var timerLabel: JLabel
     private lateinit var levelLabel: JLabel
+    private lateinit var scoreLabel: JLabel
 
 
 
     private lateinit var HowToPlayPopUp: HowToPlayDialogue
+    private lateinit var EndGamePopUp: EndGameDialogue
     private lateinit var demoTimer: Timer
 
 
@@ -262,11 +264,12 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 36)
 
         HowToPlayPopUp = HowToPlayDialogue()
+        EndGamePopUp = EndGameDialogue()
 
-        instructionLabel = JLabel("<html><strong> Welcome to Sweet Sundae!")
-        instructionLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-        instructionLabel.bounds = Rectangle(30,20,250,50)
-        add(instructionLabel)
+        titleLabel = JLabel("<html><strong> Welcome to Sweet Sundae!")
+        titleLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
+        titleLabel.bounds = Rectangle(30,20,250,50)
+        add(titleLabel)
 
         HowToPlayButton = JButton("How to play")
         HowToPlayButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
@@ -320,38 +323,41 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
 
         item1Label = JLabel("ITEM 1")
         item1Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-        item1Label.bounds = Rectangle(30,120,250,50)
+        item1Label.bounds = Rectangle(30,150,250,50)
         add(item1Label)
 
         item2Label = JLabel("ITEM 2")
         item2Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-        item2Label.bounds = Rectangle(30,150,250,50)
+        item2Label.bounds = Rectangle(30,180,250,50)
         add(item2Label)
 
         item3Label = JLabel("ITEM 3")
         item3Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-        item3Label.bounds = Rectangle(30,180,250,50)
+        item3Label.bounds = Rectangle(30,210,250,50)
         add(item3Label)
 
         item4Label = JLabel("ITEM 4")
         item4Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-        item4Label.bounds = Rectangle(30,210,250,50)
+        item4Label.bounds = Rectangle(30,240,250,50)
         add(item4Label)
 
         item5Label = JLabel("ITEM 5")
         item5Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-        item5Label.bounds = Rectangle(30,240,250,50)
+        item5Label.bounds = Rectangle(30,270,250,50)
         add(item5Label)
 
-        timerLabel = JLabel("0.00")
+        timerLabel = JLabel("<html> <strong> Time: </strong> <br> 120")
         timerLabel.foreground = Color.white
-        timerLabel.bounds = Rectangle(150,60,250,50)
+        timerLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 16)
+        timerLabel.bounds = Rectangle(170,60,250,50)
         add(timerLabel)
 
-        levelLabel = JLabel("Level")
-        levelLabel.foreground = Color.white
-        levelLabel.bounds = Rectangle(200,60,250,50)
-        add(levelLabel)
+        scoreLabel = JLabel("Score: 0")
+        scoreLabel.foreground =  Color.WHITE
+        scoreLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 16)
+        scoreLabel.bounds = Rectangle(230,60,250,50)
+        add(scoreLabel)
+
 
 
         demoTimer = Timer(1000,this)
@@ -373,7 +379,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         currentLabel.text = app.locationList[app.currentLocation].name
 
         currentDescriptionLabel.text = if (foundItem) {
-            "${app.locationList[app.currentLocation].description}\n\nYou have found your ${app.locationList[app.currentLocation].itemName}!"
+            "<html>${app.locationList[app.currentLocation].description}\n\n<br><br>You have found your ${app.locationList[app.currentLocation].itemName}!"
         } else {
             app.locationList[app.currentLocation].description
         }
@@ -418,6 +424,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
             southButton.isEnabled = false
             westButton.isEnabled  = false
         }
+
+        scoreLabel.text = "<html> <strong> Score: </strong> <br> ${app.score.toString()}"
 
 
 
@@ -465,12 +473,16 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
             demoTimer -> {
                 time--
 
-                timerLabel.text = time.toString()
+                timerLabel.text = "<html><strong> Time: </strong><br> ${time.toString()}"
 
                 if (time == 0) {
                     demoTimer.stop()
+                    app.resetGame()
+                    EndGamePopUp.isVisible = true
+                    updateView()
+
                 }
-            }
+        }
         }
     }
 
@@ -506,12 +518,55 @@ class HowToPlayDialogue(): JDialog() {
         val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 11)
 
         // Adding <html> to the label text allows it to wrap
-        val message = JLabel("<html> <strong> How to play? </strong> You are now working at the Sunnyville ice cream shop and it can get very popular during the summer. So your job, is to complete those ice cream orders and that is very simple. All you need to do is collect the things you need for the recipe shown on the left. Here's a brief tips and instruction for you:<br><br> 1. Use the buttons below to move around the map and be sure to remember where you are going! <br><br> 2. Collect the things you need, and once you have collected it, that ingredient will turn green <br><br> 3. Use your time WISELY! Otherwise you will fail to complete the order. ")
-        message.bounds = Rectangle(50, 10, 350, 250)
-        message.horizontalAlignment = SwingConstants.CENTER
-        message.font = baseFont
-        add(message)
+        val instruction = JLabel("<html> <strong> How to play? </strong> The game is very simple. All you need to do is collect the things you need for the recipe shown on the left. Here's a brief tips and instruction for you:<br><br> 1. Use the buttons below to move around the map and be sure to remember where you are going! <br><br> 2. Collect the things you need, and once you have collected it, that ingredient will turn green <br><br> 3. Use your time WISELY! Otherwise you will fail to complete the order. ")
+        instruction.bounds = Rectangle(50, 10, 350, 250)
+        instruction.horizontalAlignment = SwingConstants.CENTER
+        instruction.font = baseFont
+        add(instruction)
     }
+}
+
+class EndGameDialogue(): JDialog() {
+
+    init {
+        configureWindow()
+        addControls()
+        setLocationRelativeTo(null)     // Centre the window
+    }
+
+    /**
+     * Setup the dialog window
+     */
+    private fun configureWindow() {
+        title = "End game"
+        contentPane.preferredSize = Dimension(450, 300)
+        isResizable = false
+        isModal = true
+        layout = null
+        pack()
+    }
+
+    private fun addControls() {
+        val baseFont = Font(Font.SANS_SERIF, Font.BOLD, 20)
+
+        // Adding <html> to the label text allows it to wrap
+        val congratsMessage = JLabel("<html> CONGRATULATIONS!&#127881")
+        congratsMessage.bounds = Rectangle(125, 30, 300, 50)
+        congratsMessage.foreground = Color.WHITE
+        congratsMessage.font = baseFont
+        add(congratsMessage)
+
+        val playAgainButton = JButton("Play Again")
+        playAgainButton.bounds = Rectangle(150,200,150,30)
+        playAgainButton.background = Color(91, 199, 195)
+        playAgainButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 14)
+        playAgainButton.foreground = Color.black
+//        playAgainButton.addActionListener(this)
+        add(playAgainButton)
+
+        val finishScore = JLabel("<html> You score")
+    }
+
 }
 
 

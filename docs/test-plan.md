@@ -10,8 +10,7 @@ Terminology:
 
 ---
 ## Starter
-
-The player should start at the counter.
+The counter is the starting point of the game.
 
 ## Test data used
 
