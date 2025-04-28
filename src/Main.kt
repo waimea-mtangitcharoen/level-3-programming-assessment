@@ -17,7 +17,6 @@ import com.formdev.flatlaf.FlatDarkLaf
 import java.awt.*
 import java.awt.event.*
 import javax.sound.sampled.AudioSystem
-import javax.sound.sampled.Clip
 import javax.swing.*
 
 
@@ -68,6 +67,12 @@ class App() {
     var recipe1 = listOf("Cone", "Ice cream", "Gummy bear", "Strawberry sauce")
     var recipe2 = listOf("Paper cup", "Ice cream", "Whip cream", "Sprinkle")
     var recipe3 = listOf("Cone", "Soft serve", "Cherry")
+    var recipe4 = listOf("Paper cup", "Soft-serve", "Cookie", "Chocolate")
+    var recipe5 = listOf("Boat", "Ice cream", "Almonds", "Whip cream", "Cherry")
+    var recipe6 = listOf("Cookie", "Soft serve", "Soft-serve", "Sprinkle")
+    var recipe7 = listOf("Cone", "Almonds", "Soft-serve", "Gummy bear")
+    var recipe8 = listOf("Boat", "Chocolate", "Whip cream", "Ice cream", "Cone")
+    var recipe9 = listOf("Cookie", "Strawberry sauce", "Ice cream", "Whip cream")
 
     // Recipes for an order will be randomised
     var currentRecipe: List<String>
@@ -84,10 +89,17 @@ class App() {
         recipes.add(recipe1)
         recipes.add(recipe2)
         recipes.add(recipe3)
+        recipes.add(recipe4)
+        recipes.add(recipe5)
+        recipes.add(recipe6)
+        recipes.add(recipe7)
+        recipes.add(recipe8)
+        recipes.add(recipe9)
 
         currentRecipe = recipes.random()
     }
 
+    // To start a game all over again
     fun resetGame() {
         timeLimit = INITIAL_TIME_LIMIT
         currentRecipe = recipes.random()
@@ -96,8 +108,7 @@ class App() {
         score = 0
     }
 
-
-
+    // For playing a sound file
     fun playSound(file: String) {
         val soundFile = this::class.java.getResourceAsStream("sounds/$file.wav")
         val soundStream = AudioSystem.getAudioInputStream(soundFile)
@@ -106,7 +117,6 @@ class App() {
         soundClip.start()
     }
 
-
     // Create location and define the connection
     fun setupMap() {
         locationList.add(Location("Counter", "This is where your order will be placed.", 1, 8, null, null,""))  // 0
@@ -114,7 +124,7 @@ class App() {
         locationList.add(Location("Chocolate room", "You can collect chocolates from here", 3,null,null,1, "Chocolate")) // 2
         locationList.add(Location("Fruit bar", "You can collect fruits here",4,null,2,null, "Cherry")) // 3
         locationList.add(Location("Topping station", "You can collect some sprinkles here", null,6,3,5,"Sprinkle")) // 4
-        locationList.add(Location("Soft-serve machine room", "You can collect soft-serve here",null,4,null,null, "Soft serve")) // 5
+        locationList.add(Location("Soft-serve machine room", "You can collect soft-serve here",null,4,null,null, "Soft-serve")) // 5
         locationList.add(Location("Cookies cupboard", "You can collect cookies here", 7,null,null,4,"Cookie")) // 6
         locationList.add(Location("Dish washer", "You can collect boat here", null,null,6,null,"Boat")) // 7
         locationList.add(Location("Paper cupboard", "You can collect paper cup here", null,11,9,0,"Paper cup")) // 8
@@ -125,8 +135,12 @@ class App() {
         locationList.add(Location("Nuts cupboard", "You can collect almonds here",null,null,null,10, "Almonds"))//13
     }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //Movement functions
     fun moveNorth() {
-        if (locationList[currentLocation].north != null) //If there is  location in that direction then move to that location
+        //If there is  location in the north then move to that location
+        if (locationList[currentLocation].north != null)
             currentLocation = locationList[currentLocation].north!!
     }
 
@@ -145,7 +159,11 @@ class App() {
             currentLocation = locationList[currentLocation].west!!
     }
 
+ //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //Is there an item in that location that the player needs
     fun checkIfRoomHasItem(): Boolean {
+        //If the item in that room matches the one required on the recipe
         if (currentRecipe[currentItem] == locationList[currentLocation].itemName) {
             playSound("bell")
             score += ITEM_SCORE
@@ -168,6 +186,7 @@ class App() {
 
     }
 
+    //If one recipe is done, randomized another one
     fun getNewRecipe() {
         currentRecipe = recipes.random()
         currentItem = 0
@@ -184,7 +203,7 @@ class App() {
  * Defines the UI and responds to events
  * The app model should be passwd as an argument
  */
-class MainWindow(val app: App) : JFrame(), ActionListener {
+class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
     // Fields to hold the UI elements
     private lateinit var clicksLabel: JLabel
@@ -192,28 +211,27 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var titleLabel: JLabel
     private lateinit var HowToPlayButton: JButton
     private lateinit var playButton: JButton
+
     private lateinit var northButton: JButton
     private lateinit var southButton: JButton
     private lateinit var eastButton: JButton
     private lateinit var westButton: JButton
+
     private lateinit var currentLabel: JLabel
     private lateinit var currentDescriptionLabel: JLabel
+
     private lateinit var item1Label: JLabel
     private lateinit var item2Label: JLabel
     private lateinit var item3Label: JLabel
     private lateinit var item4Label: JLabel
     private lateinit var item5Label: JLabel
+
     private lateinit var timerLabel: JLabel
-    private lateinit var levelLabel: JLabel
     private lateinit var scoreLabel: JLabel
-
-
 
     private lateinit var HowToPlayPopUp: HowToPlayDialogue
     private lateinit var EndGamePopUp: EndGameDialogue
-    private lateinit var demoTimer: Timer
-
-
+    private lateinit var countdownTimer: Timer
 
     var time: Int = 0
     /**
@@ -345,9 +363,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         scoreLabel.bounds = Rectangle(230,60,250,50)
         add(scoreLabel)
 
-
-
-        demoTimer = Timer(1000,this)
+        countdownTimer = Timer(1000,this)
 
 
 
@@ -397,7 +413,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         item5Label.text = if (app.currentItem > 4) app.currentRecipe[4] else ""
         item5Label.foreground = if (app.currentItem > 5) Color.GREEN else Color.WHITE
 
-        if (demoTimer.isRunning) {
+        if (countdownTimer.isRunning) {
             playButton.isEnabled  = false
             northButton.isEnabled = true
             eastButton.isEnabled  = true
@@ -453,17 +469,17 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
 
               playButton ->{
                   time = app.timeLimit
-                  demoTimer.start()
+                  countdownTimer.start()
                   updateView()
               }
 
-            demoTimer -> {
+            countdownTimer -> {
                 time--
 
                 timerLabel.text = "<html><strong> Time: </strong><br> ${time.toString()}"
 
                 if (time == 0) {
-                    demoTimer.stop()
+                    countdownTimer.stop()
                     app.resetGame()
                     app.playSound("tada")
                     EndGamePopUp.isVisible = true
@@ -472,6 +488,18 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
                 }
         }
         }
+    }
+
+    override fun keyTyped(e: KeyEvent?) {
+        println("")
+    }
+
+    override fun keyPressed(e: KeyEvent?) {
+        println("Key Pressed: ${e}")
+    }
+
+    override fun keyReleased(e: KeyEvent?) {
+        TODO("Not yet implemented")
     }
 
 }
@@ -514,7 +542,7 @@ class HowToPlayDialogue(): JDialog() {
     }
 }
 
-class EndGameDialogue(): JDialog() {
+class EndGameDialogue(): JDialog(), ActionListener {
 
     init {
         configureWindow()
@@ -538,7 +566,7 @@ class EndGameDialogue(): JDialog() {
         val baseFont = Font(Font.SANS_SERIF, Font.BOLD, 20)
 
         // Adding <html> to the label text allows it to wrap
-        val congratsMessage = JLabel("<html> CONGRATULATIONS!&#127881")
+        val congratsMessage = JLabel("<html> CONGRATULATIONS!<br>&#127881 &#127881 &#127881 &#127881")
         congratsMessage.bounds = Rectangle(125, 30, 300, 50)
         congratsMessage.foreground = Color.WHITE
         congratsMessage.font = baseFont
@@ -549,10 +577,16 @@ class EndGameDialogue(): JDialog() {
         playAgainButton.background = Color(91, 199, 195)
         playAgainButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 14)
         playAgainButton.foreground = Color.black
-//        playAgainButton.addActionListener(this)
+        playAgainButton.addActionListener(this)
         add(playAgainButton)
 
-        val finishScore = JLabel("<html> You score")
+        val finishScore = JLabel("<html> You score = ")
+    }
+
+    override fun actionPerformed(e: ActionEvent?) {
+        when (e?.source) {
+
+        }
     }
 
 }
