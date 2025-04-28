@@ -52,7 +52,7 @@ class Location(
  * stored, plus any application logic functions
  */
 class App() {
-    val INITIAL_TIME_LIMIT = 5
+    val INITIAL_TIME_LIMIT = 20
     val TIME_LIMIT_ADJUST = 0.8
     var timeLimit = INITIAL_TIME_LIMIT
 
@@ -64,9 +64,7 @@ class App() {
 
     val recipes = mutableListOf<List<String>>()
 
-    private lateinit var bellSound: Clip
-
-    // Recipes for ice cream orders
+    // List of recipes for ice cream orders
     var recipe1 = listOf("Cone", "Ice cream", "Gummy bear", "Strawberry sauce")
     var recipe2 = listOf("Paper cup", "Ice cream", "Whip cream", "Sprinkle")
     var recipe3 = listOf("Cone", "Soft serve", "Cherry")
@@ -76,7 +74,7 @@ class App() {
 
     // Tracks the item we are looking for within the recipe
     var currentItem = 0
-
+    // Track the score, initial score is 0
     var score = 0
 
 
@@ -171,23 +169,12 @@ class App() {
     }
 
     fun getNewRecipe() {
-//        currentLocation = 0
         currentRecipe = recipes.random()
         currentItem = 0
-
+        playSound("recipe_done")
         // Adjust time to speed up the next challenge
         timeLimit = (timeLimit * TIME_LIMIT_ADJUST).toInt()
     }
-//   ----------------------------------------------------------------------------------------
-
-    var currentLevel = 1
-
-    fun updateLevel() {
-        if (currentItem == currentRecipe.size) {
-            currentLevel++
-        }
-    }
-
 
 }
 
@@ -478,6 +465,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
                 if (time == 0) {
                     demoTimer.stop()
                     app.resetGame()
+                    app.playSound("tada")
                     EndGamePopUp.isVisible = true
                     updateView()
 
