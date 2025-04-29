@@ -197,6 +197,8 @@ class App() {
 
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 /**
  * Main UI window (view)
@@ -234,6 +236,9 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
     private lateinit var countdownTimer: Timer
 
     var time: Int = 0
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     /**
      * Configure the UI and display it
      */
@@ -261,6 +266,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         pack()
     }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Populate the UI with UI controls
@@ -365,10 +371,9 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
         countdownTimer = Timer(1000,this)
 
-
-
     }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Update the UI controls based on the current state
@@ -379,13 +384,16 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         // Have we found the thing we are looking for?
         val foundItem = app.checkIfRoomHasItem()
 
+        //Showing where the player is
         currentLabel.text = app.locationList[app.currentLocation].name
 
+        //Changing the description and adding a small text once the item is founded
         currentDescriptionLabel.text = if (foundItem) {
             "<html>${app.locationList[app.currentLocation].description}\n\n<br><br>You have found your ${app.locationList[app.currentLocation].itemName}!"
         } else {
             app.locationList[app.currentLocation].description
         }
+        //Changing the color of the description once the item is founded
         currentDescriptionLabel.foreground = if (foundItem) Color.GREEN else Color.WHITE
 
         // Have we found our current item?
@@ -398,7 +406,9 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
             }
         }
 
+        //Showing the item name
         item1Label.text = if (app.currentRecipe.size > 0) app.currentRecipe[0] else ""
+        //Changing text color when item is found.
         item1Label.foreground = if (app.currentItem > 0) Color.GREEN else Color.WHITE
 
         item2Label.text = if (app.currentRecipe.size > 1) app.currentRecipe[1] else ""
@@ -430,11 +440,9 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
         scoreLabel.text = "<html> <strong> Score: </strong> <br> ${app.score.toString()}"
 
-
-
-
     }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Handle any UI events (e.g. button clicks)
@@ -473,23 +481,24 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
                   updateView()
               }
 
-            countdownTimer -> {
-                time--
+              countdownTimer -> {
+                  time--
+                  timerLabel.text = "<html><strong> Time: </strong><br> ${time.toString()}"
 
-                timerLabel.text = "<html><strong> Time: </strong><br> ${time.toString()}"
-
-                if (time == 0) {
-                    countdownTimer.stop()
-                    app.resetGame()
-                    app.playSound("tada")
-                    EndGamePopUp.isVisible = true
-                    updateView()
-
-                }
-        }
+                  //What happen when time hit 0?
+                  if (time == 0) {
+                      countdownTimer.stop()
+                      app.resetGame()
+                      app.playSound("tada")
+                      EndGamePopUp.isVisible = true
+                      updateView()
+                  }
+              }
         }
     }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Handle pressing keys
     override fun keyTyped(e: KeyEvent?) {
         println("")
     }
@@ -504,7 +513,9 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+//Instruction on how to play pop up
 class HowToPlayDialogue(): JDialog() {
     /**
      * Configure the UI
@@ -542,6 +553,9 @@ class HowToPlayDialogue(): JDialog() {
     }
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//End of the game pop up (when time hits 0)
 class EndGameDialogue(): JDialog(), ActionListener {
 
     init {
