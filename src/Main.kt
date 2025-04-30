@@ -66,16 +66,19 @@ class App() {
     // List of recipes for ice cream orders
     var recipe1 = listOf("Cone", "Ice cream", "Gummy bear", "Strawberry sauce")
     var recipe2 = listOf("Paper cup", "Ice cream", "Whip cream", "Sprinkle")
-    var recipe3 = listOf("Cone", "Soft serve", "Cherry")
+    var recipe3 = listOf("Cone", "Soft-serve", "Cherry")
     var recipe4 = listOf("Paper cup", "Soft-serve", "Cookie", "Chocolate")
     var recipe5 = listOf("Boat", "Ice cream", "Almonds", "Whip cream", "Cherry")
-    var recipe6 = listOf("Cookie", "Soft serve", "Soft-serve", "Sprinkle")
+    var recipe6 = listOf("Cookie", "Soft-serve", "Sprinkle")
     var recipe7 = listOf("Cone", "Almonds", "Soft-serve", "Gummy bear")
     var recipe8 = listOf("Boat", "Chocolate", "Whip cream", "Ice cream", "Cone")
     var recipe9 = listOf("Cookie", "Strawberry sauce", "Ice cream", "Whip cream")
 
     // Recipes for an order will be randomised
     var currentRecipe: List<String>
+
+    // Set to true when a new recipe should be loaded on the next timer beat
+    var loadNewRecipe = false
 
     // Tracks the item we are looking for within the recipe
     var currentItem = 0
@@ -176,8 +179,10 @@ class App() {
     fun moveOnToNextItem(): Boolean {
         currentItem++
         if (currentItem == currentRecipe.size) {
-            getNewRecipe()
+//            getNewRecipe()
             score += RECIPE_SCORE
+            playSound("recipeDone")
+            loadNewRecipe = true
             return true
         }
         else {
@@ -190,7 +195,7 @@ class App() {
     fun getNewRecipe() {
         currentRecipe = recipes.random()
         currentItem = 0
-        playSound("recipe_done")
+
         // Adjust time to speed up the next challenge
         timeLimit = (timeLimit * TIME_LIMIT_ADJUST).toInt()
     }
@@ -211,7 +216,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
     private lateinit var clicksLabel: JLabel
     private lateinit var clickButton: JButton
     private lateinit var titleLabel: JLabel
-    private lateinit var HowToPlayButton: JButton
+    private lateinit var howToPlayButton: JButton
     private lateinit var playButton: JButton
 
     private lateinit var northButton: JButton
@@ -274,48 +279,56 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
     private fun addControls() {
         val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 36)
 
+        this.addKeyListener(this)
+
         HowToPlayPopUp = HowToPlayDialogue()
-        EndGamePopUp = EndGameDialogue()
+        EndGamePopUp = EndGameDialogue(app, this)
 
         titleLabel = JLabel("<html><strong> Welcome to Sweet Sundae!")
         titleLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
         titleLabel.bounds = Rectangle(30,20,250,50)
         add(titleLabel)
 
-        HowToPlayButton = JButton("How to play")
-        HowToPlayButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
-        HowToPlayButton.foreground = Color.black
-        HowToPlayButton.background = Color(197, 231, 237)
-        HowToPlayButton.bounds = Rectangle(30,65,100,20)
-        HowToPlayButton.addActionListener(this)
-        add(HowToPlayButton)
+        howToPlayButton = JButton("How to play")
+        howToPlayButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        howToPlayButton.foreground = Color.black
+        howToPlayButton.background = Color(197, 231, 237)
+        howToPlayButton.bounds = Rectangle(30,65,100,20)
+        howToPlayButton.addActionListener(this)
+        howToPlayButton.isFocusable = false
+        add(howToPlayButton)
 
         playButton = JButton("Play")
         playButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         playButton.foreground = Color.black
         playButton.background = Color(91, 199, 195)
         playButton.bounds = Rectangle(30,90,100,20)
+        playButton.isFocusable = false
         playButton.addActionListener(this)
         add(playButton)
 
         northButton = JButton("▲")
         northButton.bounds = Rectangle(400,180,60,60)
         northButton.addActionListener(this)
+        northButton.isFocusable = false
         add(northButton)
 
         southButton = JButton("▼")
         southButton.bounds = Rectangle(400,240,60,60)
         southButton.addActionListener(this)
+        southButton.isFocusable = false
         add(southButton)
 
         westButton = JButton("◀")
         westButton.bounds = Rectangle(340,240,60,60)
         westButton.addActionListener(this)
+        westButton.isFocusable = false
         add(westButton)
 
         eastButton = JButton("▶")
         eastButton.bounds = Rectangle(460,240,60,60)
         eastButton.addActionListener(this)
+        eastButton.isFocusable = false
         add(eastButton)
 
         currentLabel = JLabel("Counter")
@@ -381,6 +394,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
      */
     fun updateView() {
 
+        this.requestFocus()
+
         // Have we found the thing we are looking for?
         val foundItem = app.checkIfRoomHasItem()
 
@@ -420,8 +435,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         item4Label.text = if (app.currentRecipe.size > 3) app.currentRecipe[3] else ""
         item4Label.foreground = if (app.currentItem > 3) Color.GREEN else Color.WHITE
 
-        item5Label.text = if (app.currentItem > 4) app.currentRecipe[4] else ""
-        item5Label.foreground = if (app.currentItem > 5) Color.GREEN else Color.WHITE
+        item5Label.text = if (app.currentRecipe.size > 4) app.currentRecipe[4] else ""
+        item5Label.foreground = if (app.currentItem > 4) Color.GREEN else Color.WHITE
 
         if (countdownTimer.isRunning) {
             playButton.isEnabled  = false
@@ -471,7 +486,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
                   updateView()
               }
 
-              HowToPlayButton ->{
+              howToPlayButton ->{
                   HowToPlayPopUp.isVisible = true
               }
 
@@ -485,30 +500,47 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
                   time--
                   timerLabel.text = "<html><strong> Time: </strong><br> ${time.toString()}"
 
+                  // Do we need to load a new recipe?
+                  if (app.loadNewRecipe) {
+                      app.getNewRecipe()
+                      updateView()
+                      app.loadNewRecipe = false
+                  }
+
                   //What happen when time hit 0?
                   if (time == 0) {
                       countdownTimer.stop()
-                      app.resetGame()
                       app.playSound("tada")
-                      EndGamePopUp.isVisible = true
                       updateView()
+//                      app.resetGame()
+                      EndGamePopUp.updateView()
+                      EndGamePopUp.isVisible = true
+
                   }
               }
         }
     }
 
-//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //Handle pressing keys
     override fun keyTyped(e: KeyEvent?) {
-        println("")
+
     }
 
     override fun keyPressed(e: KeyEvent?) {
-        println("Key Pressed: ${e}")
+        when (e?.keyCode) {
+        KeyEvent.VK_UP    -> app.moveNorth()
+        KeyEvent.VK_DOWN  -> app.moveSouth()
+        KeyEvent.VK_LEFT  -> app.moveWest()
+        KeyEvent.VK_RIGHT -> app.moveEast()
+        }
+        updateView()
     }
 
     override fun keyReleased(e: KeyEvent?) {
-        TODO("Not yet implemented")
+
     }
 
 }
@@ -556,7 +588,10 @@ class HowToPlayDialogue(): JDialog() {
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //End of the game pop up (when time hits 0)
-class EndGameDialogue(): JDialog(), ActionListener {
+class EndGameDialogue(val app: App, val mainWindow: MainWindow): JDialog(), ActionListener {
+
+    private lateinit var finishScoreLabel: JLabel
+    private lateinit var playAgainButton: JButton
 
     init {
         configureWindow()
@@ -586,7 +621,8 @@ class EndGameDialogue(): JDialog(), ActionListener {
         congratsMessage.font = baseFont
         add(congratsMessage)
 
-        val playAgainButton = JButton("Play Again")
+        //Button on the pop-up to play again
+        playAgainButton = JButton("Play Again")
         playAgainButton.bounds = Rectangle(150,200,150,30)
         playAgainButton.background = Color(91, 199, 195)
         playAgainButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 14)
@@ -594,12 +630,25 @@ class EndGameDialogue(): JDialog(), ActionListener {
         playAgainButton.addActionListener(this)
         add(playAgainButton)
 
-        val finishScore = JLabel("<html> You score = ")
+        finishScoreLabel = JLabel("<html> You score = ")
+        finishScoreLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 24)
+        finishScoreLabel.bounds = Rectangle(145, 100, 300, 50)
+        finishScoreLabel.foreground = Color.WHITE
+        add(finishScoreLabel)
+    }
+
+    fun updateView() {
+        finishScoreLabel.text = "<html> You score: ${app.score}"
+//         ">&#127881 ".repeat(app.score)
     }
 
     override fun actionPerformed(e: ActionEvent?) {
         when (e?.source) {
-
+            playAgainButton -> {
+                app.resetGame()
+                mainWindow.updateView()
+                this.isVisible = false
+            }
         }
     }
 

@@ -190,4 +190,4 @@ This is the result from the second test.
 When the congratulations window disappear, I could see that the game has reset. The play button is enabled, the movement buttons are disabled, the player has been moved back to the counter (starting position), and the score is at 0. The time label still needs to be fixed, it should be labeled as 12 in this case as I have input 12 seconds as the original time limit for faster testing trials.
 
 
-
+![img_1.png](img_1.png)
