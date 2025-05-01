@@ -10,14 +10,14 @@ This checklist can be used to gauge progress towards different levels of success
 
 The game functions correctly and meets the specification:
 - [x] The game is **playable**
-- [ ] The game has a **GUI** with a range of controls (still need key listener)
+- [x] The game has a **GUI** with a range of controls
 - [x] The **instructions** for the game are available via the GUI
 - [x] Player provides game **inputs via the GUI** (e.g. moves, actions)
 - [x] The **current status** of the game is **shown in the GUI**, updated each player input
-- [ ] The game is based on a **non-trivial map** (ask people whether the map is too small or not)
+- [x] The game is based on a **non-trivial map** (ask people whether the map is too small or not)
 - [x] The player can **move between locations**
 - [x] The player has a **clear purpose** they can attempt to achieve
-- [ ] A **win / end / loss state** is possible
+- [x] A **win / end / loss state** is possible
 
 ### Program Code
 
@@ -38,19 +38,19 @@ The program structure:
 The program code:
 - [ ] Is **indented** correctly
 - [ ] Is **laid-out clearly**  not yet
-- [ ] Contains **comments** that help in understanding how it works
+- [x] Contains **comments** that help in understanding how it works
 
 ### Program Testing
 
 The program has been tested and there is documented evidence that:
 - [ ] The game is **fully functional**, showing testing of:
-  - [ ] game setup
-  - [ ] player movement
-  - [ ] other player actions
-  - [ ] scoring (if any)
-  - [ ] player win / lose states
+  - [x] game setup
+  - [x] player movement
+  - [x] other player actions
+  - [x] scoring (if any)
+  - [] player win / lose states
   - [ ] final feedback (if appropriate)
-- [ ] **Valid (expected) data** has been used to test **all data inputs**
+- [x] **Valid (expected) data** has been used to test **all data inputs**
 - [ ] Where tests have failed, **fixes** are discussed and **tests re-run**
 
 ---
@@ -61,21 +61,21 @@ The program has been tested and there is documented evidence that:
 
 The program stores data using variables, where:
 - [ ] Variable **names are well-chosen** (relating to their purpose)
-- [ ] Variable names **begin with lowercase**
-- [ ] Naming is consistent, either **camelCase or snake_case**
+- [x] Variable names **begin with lowercase**
+- [x] Naming is consistent, either **camelCase or snake_case**
 - [ ] Variables are **scoped appropriately** (global or local to a function)
-- [ ] **Global** variables are only used if **genuinely needed**
+- [x] **Global** variables are only used if **genuinely needed**
 
 The program uses OOP classes and objects appropriately, where:
 - [ ] OOP class **names are well-chosen**, relating to their functionality
 - [ ] OOP class names **begin with uppercase**
-- [ ] OOP classes contain **well-chosen data fields**
-- [ ] OOP classes contain **well-chosen methods**
+- [x] OOP classes contain **well-chosen data fields**
+- [x] OOP classes contain **well-chosen methods**
 
 The program uses functions appropriately, where:
-- [ ] Function **names are well-chosen**, relating to their functionality 
-- [ ] Functions use **parameters** to pass data into them as needed
-- [ ] Functions provide a **return value** to the calling code if needed
+- [ ] Function **names are well-chosen**, relating to their functionality (check again)
+- [x] Functions use **parameters** to pass data into them as needed
+- [x] Functions provide a **return value** to the calling code if needed
 
 ### Game GUI
 
@@ -85,7 +85,7 @@ The game GUI:
 ### Program Documentation
 
 The program code is well-commented:
-- [ ] **JavaDoc Block comments** are used at the top of each **file** and **function**
+- [ ] **JavaDoc Block comments** are used at the top of each **file** and **function** (check again)
 - [ ] Comments accurately describe the **function and behaviour** of the code:
   - [ ] Defining the **purpose** of functions / key blocks of code
   - [ ] Explaining the **reason** (the '**why**') of key parts of the code
@@ -94,9 +94,9 @@ The program code is well-commented:
 ### Program Testing
 
 The program has been tested using:
-- [ ] A test plan **prepared in advance** of the coding
-- [ ] A test plan that **defines test data values** to be used
-- [ ] Test values that cover **boundary** (limit / edge) cases
+- [x] A test plan **prepared in advance** of the coding
+- [x] A test plan that **defines test data values** to be used
+- [x] Test values that cover **boundary** (limit / edge) cases
 
 ---
 
@@ -106,16 +106,16 @@ The program has been tested using:
 
 Program flexibility and maintainability is aided by:
 - [ ] **Constants** being used to define key values, and used throughout the program
-- [ ] Variable values being **derived at run-time** (from other variables / constants)
+- [x] Variable values being **derived at run-time** (from other variables / constants)
 - [ ] Literal values only being used if they **make sense**, and they don't impact program flexibility
 
 Program flexibility and maintainability is aided by good program structure:
 - [ ] Conditions, branching, loops and functions are used **effectively**
 - [ ] Procedures are **efficient** (minimal iterations, etc.)
 - [ ] **Minimal duplication of code** (instead using loops, or having multiple calls to a single function)
-- [ ] OOP classes are **well-chosen and logical**, with a clearly defined purpose
-- [ ] Functions are **well-chosen and logical**, with a clearly defined purpose
-- [ ] The classes and functions chosen represent a **logical decomposition** of the task
+- [x] OOP classes are **well-chosen and logical**, with a clearly defined purpose
+- [x] Functions are **well-chosen and logical**, with a clearly defined purpose
+- [x] The classes and functions chosen represent a **logical decomposition** of the task
 
 ### Game GUI
 

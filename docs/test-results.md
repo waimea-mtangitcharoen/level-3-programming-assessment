@@ -48,6 +48,17 @@ When the south button is clicked, the player moves from the paper cupboard to co
 
 When the west button is clicked, the player moves from the sauce fountain to the paper cupboard, which is to the west of the sauce fountain.
 
+### Overall map bound
+The player can move to every locations on the map.
+
+### Test data used
+Use the map and the direction buttons to move to all the location on the map.
+
+### Test Result
+
+![Map's boundary](screenshots%2FmapBound.gif)
+
+The test result shows that I was able to move anywhere within the boundary i.e. anywhere on the map that I have created. This can be referred to the picture of the map at the top.
 ---
 
 ## Recipe check
@@ -108,6 +119,21 @@ Items on the list and try looking for the second item on the recipe (have not fo
 In this trial, I tried looking for the soft-serve, which is the second item on the list. I found my way to the soft serve machine where the soft serve can be found. However, the text of soft-serve on the recipe does not turn green and remains as white. This tells the player that they must collect the first item on the list. The GIF below shows when I have already found the fist item, and how the game allows me to look for the next one.
 
 ![Order Items 2](screenshots%2ForderItems2.gif)
+
+### Item found sound
+There is a bell sound telling the player that they have found the item.
+
+### Test data used
+Bell sound audio and going into the room with item need.
+
+### Test Result
+
+
+
+The bell sounds play as soon as the player enters the room with the item that matches the item in the recipe.
+
+### Recipe found sound
+
 
 ## How to play button
 This is where the player can see the instruction for this game.
@@ -189,5 +215,12 @@ This is the result from the second test.
 
 When the congratulations window disappear, I could see that the game has reset. The play button is enabled, the movement buttons are disabled, the player has been moved back to the counter (starting position), and the score is at 0. The time label still needs to be fixed, it should be labeled as 12 in this case as I have input 12 seconds as the original time limit for faster testing trials.
 
+## Feedback
+The feedback from a player is that there should be a play again button on the pop up to reset the game and clicking the cross will take you back to how it was.
+Here is the results from adding the play again button.
 
-![img_1.png](img_1.png)
+![playAgainButton.gif](screenshots%2FplayAgainButton.gif)
+
+The game reset, but there is a problem with the time not displayed as the original time limit (120 s).
+
+![Problem with new Recipe](images/newRecipeError)

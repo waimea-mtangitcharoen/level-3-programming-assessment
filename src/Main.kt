@@ -51,7 +51,7 @@ class Location(
  * stored, plus any application logic functions
  */
 class App() {
-    val INITIAL_TIME_LIMIT = 20
+    val INITIAL_TIME_LIMIT = 120
     val TIME_LIMIT_ADJUST = 0.8
     var timeLimit = INITIAL_TIME_LIMIT
 
@@ -181,7 +181,7 @@ class App() {
         if (currentItem == currentRecipe.size) {
 //            getNewRecipe()
             score += RECIPE_SCORE
-            playSound("recipeDone")
+            playSound("tada")
             loadNewRecipe = true
             return true
         }
@@ -236,8 +236,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
     private lateinit var timerLabel: JLabel
     private lateinit var scoreLabel: JLabel
 
-    private lateinit var HowToPlayPopUp: HowToPlayDialogue
-    private lateinit var EndGamePopUp: EndGameDialogue
+    private lateinit var howToPlayPopUp: HowToPlayDialogue
+    private lateinit var endGamePopUp: EndGameDialogue
     private lateinit var countdownTimer: Timer
 
     var time: Int = 0
@@ -281,19 +281,21 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
         this.addKeyListener(this)
 
-        HowToPlayPopUp = HowToPlayDialogue()
-        EndGamePopUp = EndGameDialogue(app, this)
+        howToPlayPopUp = HowToPlayDialogue()
+        endGamePopUp = EndGameDialogue(app, this)
 
         titleLabel = JLabel("<html><strong> Welcome to Sweet Sundae!")
-        titleLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-        titleLabel.bounds = Rectangle(30,20,250,50)
+        titleLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 20)
+        titleLabel.bounds = Rectangle(150,10,300,50)
+        titleLabel.foreground = Color.WHITE
+        titleLabel.horizontalAlignment = SwingConstants.CENTER
         add(titleLabel)
 
         howToPlayButton = JButton("How to play")
         howToPlayButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         howToPlayButton.foreground = Color.black
         howToPlayButton.background = Color(197, 231, 237)
-        howToPlayButton.bounds = Rectangle(30,65,100,20)
+        howToPlayButton.bounds = Rectangle(80,85,100,20)
         howToPlayButton.addActionListener(this)
         howToPlayButton.isFocusable = false
         add(howToPlayButton)
@@ -302,7 +304,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         playButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 10)
         playButton.foreground = Color.black
         playButton.background = Color(91, 199, 195)
-        playButton.bounds = Rectangle(30,90,100,20)
+        playButton.bounds = Rectangle(80,110,100,20)
         playButton.isFocusable = false
         playButton.addActionListener(this)
         add(playButton)
@@ -332,14 +334,14 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         add(eastButton)
 
         currentLabel = JLabel("Counter")
-        currentLabel.bounds = Rectangle(330,60,200,50)
+        currentLabel.bounds = Rectangle(330,70,200,50)
         currentLabel.foreground = Color.white
         currentLabel.horizontalAlignment = SwingConstants.CENTER
         currentLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 24)
         add(currentLabel)
 
         currentDescriptionLabel = JLabel("This is where your order will be place!")
-        currentDescriptionLabel.bounds = Rectangle(330, 100, 200,50)
+        currentDescriptionLabel.bounds = Rectangle(330, 110, 200,50)
         currentDescriptionLabel.font = Font(Font.SANS_SERIF,Font.PLAIN,11)
         currentDescriptionLabel.horizontalAlignment = SwingConstants.CENTER
         currentDescriptionLabel.foreground = Color.white
@@ -347,39 +349,41 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
         item1Label = JLabel("ITEM 1")
         item1Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-        item1Label.bounds = Rectangle(30,150,250,50)
+        item1Label.bounds = Rectangle(80,150,250,50)
         add(item1Label)
 
         item2Label = JLabel("ITEM 2")
         item2Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-        item2Label.bounds = Rectangle(30,180,250,50)
+        item2Label.bounds = Rectangle(80,180,250,50)
         add(item2Label)
 
         item3Label = JLabel("ITEM 3")
         item3Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-        item3Label.bounds = Rectangle(30,210,250,50)
+        item3Label.bounds = Rectangle(80,210,250,50)
         add(item3Label)
 
         item4Label = JLabel("ITEM 4")
         item4Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-        item4Label.bounds = Rectangle(30,240,250,50)
+        item4Label.bounds = Rectangle(80,240,250,50)
         add(item4Label)
 
         item5Label = JLabel("ITEM 5")
         item5Label.font = Font(Font.SANS_SERIF, Font.PLAIN, 12)
-        item5Label.bounds = Rectangle(30,270,250,50)
+        item5Label.bounds = Rectangle(80,270,250,50)
         add(item5Label)
 
         timerLabel = JLabel("<html> <strong> Time: </strong> <br> 120")
         timerLabel.foreground = Color.white
         timerLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 16)
-        timerLabel.bounds = Rectangle(170,60,250,50)
+        timerLabel.bounds = Rectangle(195,80,250,50)
+        timerLabel.background = Color.white
         add(timerLabel)
 
         scoreLabel = JLabel("Score: 0")
         scoreLabel.foreground =  Color.WHITE
         scoreLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 16)
-        scoreLabel.bounds = Rectangle(230,60,250,50)
+        scoreLabel.bounds = Rectangle(255,80,250,50)
+        scoreLabel.background = Color.ORANGE
         add(scoreLabel)
 
         countdownTimer = Timer(1000,this)
@@ -487,7 +491,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
               }
 
               howToPlayButton ->{
-                  HowToPlayPopUp.isVisible = true
+                  howToPlayPopUp.isVisible = true
               }
 
               playButton ->{
@@ -510,11 +514,11 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
                   //What happen when time hit 0?
                   if (time == 0) {
                       countdownTimer.stop()
-                      app.playSound("tada")
+                      app.playSound("congratulations")
                       updateView()
 //                      app.resetGame()
-                      EndGamePopUp.updateView()
-                      EndGamePopUp.isVisible = true
+                      endGamePopUp.updateView()
+                      endGamePopUp.isVisible = true
 
                   }
               }

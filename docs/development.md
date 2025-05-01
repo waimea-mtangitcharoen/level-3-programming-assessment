@@ -42,4 +42,35 @@ Example description and notes. Example description and notes. Example descriptio
 
 - I think it will appear better and make more sense if the first alphabetical letter is in uppercase.
 ---
+## 01/05/2025
+
+![Fix UI](images/guiReAdjust.png)
+
+This is what I think should be fixed or re-adjusted for the UI.
+
+![Fixed left and right margin](images/leftRightMargin.png)
+
+Left-right margin is now fixed. However, the top and bottom margin are still not equal.
+
+![Adjust the heading](images/headingAdjust.png)
+
+Heading has now been readjusted. It is put at the centre of the window with an increase in font-size.
+
+![Some components moved](images/componentAdjust.png)
+
+It has been re-adjusted a little bit more. It still looks packed and not in place because I have just only moved the how to play button and play button.
+
+![Locations moved](images/locationsAdjust.png])
+
+Looking better once the current location and description labels have been moved.
+
+![Final GUI](images/guiFinalAdjust.png)
+
+The interface if the game now looks reasonably better. Maybe I should add boxes around some components.
+
+## 02/05/2025
+
+![Out of bound error detected](images/outBoundError1.png)
+
+![Out of bound eorror detected 2](images/outBoundError2.png)
 
