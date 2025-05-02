@@ -6,6 +6,8 @@ The test results show the actual outcome of the testing, following the [Test Pla
 ## Map
 The following image is the map that I have created for the Sweet sundae game, and will be used as part of the test data for most of the testings.
 
+![Game map](images/map1.png)
+
 
 ## Starter
 The player start from the counter (starter point of the game).
@@ -59,6 +61,7 @@ Use the map and the direction buttons to move to all the location on the map.
 ![Map's boundary](screenshots%2FmapBound.gif)
 
 The test result shows that I was able to move anywhere within the boundary i.e. anywhere on the map that I have created. This can be referred to the picture of the map at the top.
+
 ---
 
 ## Recipe check
@@ -66,24 +69,24 @@ The test result shows that I was able to move anywhere within the boundary i.e. 
 ### Showing recipe
 The recipe must be shown on the left hand-side of the game window.
 
-### Test data used
+#### Test data used
 A list of items in a recipe
 
-### Test Result
+#### Test Result
 ![Showing recipe](images/recipeShow.png)
 
 The part highlighted in yellow shows that the list of items in the recipe is visible on the left.
 
-### Feedback
+#### Feedback
 There should be a name of that recipe shown above the first item.
 
 ### Recipe's randomisation
 The player will be given a random recipe after completing each recipe.
 
-### Test data used
+#### Test data used
 Tried completing the recipe
 
-### Test Result
+#### Test Result
 ![recipe_random.gif](screenshots%2FrecipeRandom.gif)
 
 Once the player has complated the first recipe, the game randomises another recipe for the player. The list of items need in the 2 recipes are different.
@@ -91,10 +94,10 @@ Once the player has complated the first recipe, the game randomises another reci
 ### Items in the recipe found
 The player has found the item shown in the recipe.
 
-### Test data used
+#### Test data used
 Name of the items in the recipe and name of the items in different location on the map.
 
-### Test Result
+#### Test Result
 ![Item Found](screenshots%2FitemFound.gif)
 
 The name of that item in the recipe turns green after it has been found. I have also set the description of the room to green as well when the item has been found
@@ -128,7 +131,11 @@ Bell sound audio and going into the room with item need.
 
 ### Test Result
 
+<video width="800" height="400" controls>
+  <source src="screenshots/itemFoundSound.mp4" type="video/mp4">
+</video>
 
+[itemFoundSound.mp4](screenshots/itemFoundSound.mp4)
 
 The bell sounds play as soon as the player enters the room with the item that matches the item in the recipe.
 
@@ -211,7 +218,7 @@ However, the game does not reset, and I had to click a direction button before i
 
 This is the result from the second test.
 
-![Fixe Reseting](screenshots%2FresetFix.gif)
+![Fixed Reseting](screenshots%2FresetFix.gif)
 
 When the congratulations window disappear, I could see that the game has reset. The play button is enabled, the movement buttons are disabled, the player has been moved back to the counter (starting position), and the score is at 0. The time label still needs to be fixed, it should be labeled as 12 in this case as I have input 12 seconds as the original time limit for faster testing trials.
 
@@ -221,7 +228,7 @@ The feedback from a player is that there should be a play again button on the po
 ## Fixed
 Here is the results from adding the play again button.
 
-![playAgainButton.gif](screenshots%2FplayAgainButton.gif)
+![Play again button](screenshots%2FplayAgainButton.gif)
 
 The game reset, but there is a problem with the time not displayed as the original time limit (120 s).
 
@@ -231,6 +238,10 @@ The game reset, but there is a problem with the time not displayed as the origin
 I let my friend tried this game. She said that I should add more rooms to the map to make it a little bit more challenging. She said that it is not too complicated at the moment, so adding maye 2 or 3 rooms will make the map a little bit more confusing and more recipes can make the game more fun and challenging.
 
 Here is the picture of the new map:
+
+![New game map](images/map2.png)
+
+I have added 3 new rooms to the map (drawn in pencil), added items and new recipe
 
 
 

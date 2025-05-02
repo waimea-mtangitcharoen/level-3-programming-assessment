@@ -11,9 +11,6 @@ The project is written in the [Kotlin](https://kotlinlang.org) programming langu
 - Object-oriented programming (OOP) classes and objects
 - Using non-core API, library or framework (?)
 
-
-** EDIT LIST ABOVE TO MATCH YOUR PROJECT**
-
 ---
 
 ## Project Files

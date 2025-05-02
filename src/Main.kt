@@ -133,7 +133,7 @@ class App() {
         locationList.add(Location("Chocolate room", "You can collect chocolates from here", 3,null,null,1, "Chocolate")) // 2
         locationList.add(Location("Fruit bar", "You can collect fruits here",4,null,2,15, "Cherry")) // 3
         locationList.add(Location("Topping station", "You can collect some sprinkles here", null,6,3,5,"Sprinkle")) // 4
-        locationList.add(Location("Soft-serve machine room", "You can collect soft-serve here",null,4,null,null, "Soft-serve")) // 5
+        locationList.add(Location("Soft-serve machine", "You can collect soft-serve here",null,4,null,null, "Soft-serve")) // 5
         locationList.add(Location("Cookies cupboard", "You can collect cookies here", 7,null,null,4,"Cookie")) // 6
         locationList.add(Location("Dish washer", "You can collect boat here", null,null,6,16,"Boat")) // 7
         locationList.add(Location("Paper cupboard", "You can collect paper cup here", null,11,9,0,"Paper cup")) // 8
@@ -346,7 +346,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         currentLocationLabel.bounds = Rectangle(330,70,200,50)
         currentLocationLabel.foreground = Color.white
         currentLocationLabel.horizontalAlignment = SwingConstants.CENTER
-        currentLocationLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 24)
+        currentLocationLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 20)
         add(currentLocationLabel)
 
         currentDescriptionLabel = JLabel("This is where your order will be place!")
