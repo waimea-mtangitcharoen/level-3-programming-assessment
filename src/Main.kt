@@ -73,6 +73,9 @@ class App() {
     var recipe7 = listOf("Cone", "Almonds", "Soft-serve", "Gummy bear")
     var recipe8 = listOf("Boat", "Chocolate", "Whip cream", "Ice cream", "Cone")
     var recipe9 = listOf("Cookie", "Strawberry sauce", "Ice cream", "Whip cream")
+    var recipe10 = listOf("Marshmallow", "Soft-serve", "Cone", "Cherry")
+    var recipe11 = listOf("Cone", "Ice cream", "Pretzel", "Brownie")
+    var recipe12 = listOf("Brownie", "Whip cream", "Ice cream", "Strawberry sauce")
 
     // Recipes for an order will be randomised
     var currentRecipe: List<String>
@@ -98,6 +101,9 @@ class App() {
         recipes.add(recipe7)
         recipes.add(recipe8)
         recipes.add(recipe9)
+        recipes.add(recipe10)
+        recipes.add(recipe11)
+        recipes.add(recipe12)
 
         currentRecipe = recipes.random()
     }
@@ -122,20 +128,23 @@ class App() {
 
     // Create location and define the connection
     fun setupMap() {
-        locationList.add(Location("Counter", "This is where your order will be placed.", 1, 8, null, null,""))  // 0
+        locationList.add(Location("Counter", "This is where your order will be placed.", 1, 8, null, 14,""))  // 0
         locationList.add(Location("Fridge", "You can collect ice cream from here", null, 2,0,null, "Ice cream")) // 1
         locationList.add(Location("Chocolate room", "You can collect chocolates from here", 3,null,null,1, "Chocolate")) // 2
-        locationList.add(Location("Fruit bar", "You can collect fruits here",4,null,2,null, "Cherry")) // 3
+        locationList.add(Location("Fruit bar", "You can collect fruits here",4,null,2,15, "Cherry")) // 3
         locationList.add(Location("Topping station", "You can collect some sprinkles here", null,6,3,5,"Sprinkle")) // 4
         locationList.add(Location("Soft-serve machine room", "You can collect soft-serve here",null,4,null,null, "Soft-serve")) // 5
         locationList.add(Location("Cookies cupboard", "You can collect cookies here", 7,null,null,4,"Cookie")) // 6
-        locationList.add(Location("Dish washer", "You can collect boat here", null,null,6,null,"Boat")) // 7
+        locationList.add(Location("Dish washer", "You can collect boat here", null,null,6,16,"Boat")) // 7
         locationList.add(Location("Paper cupboard", "You can collect paper cup here", null,11,9,0,"Paper cup")) // 8
         locationList.add(Location("Cone room", "You can collect cones here", 8,13,10,null, "Cone")) //9
         locationList.add(Location("Candy storage", "You can collect candies here",9,13,null,null,"Gummy bear")) //10
         locationList.add(Location("Sauce fountain", "You can put sauces on in here", 12,null,null,8, "Strawberry sauce")) //11
         locationList.add(Location("Dairy fridge", "You can collect dairy stuff here", null,null,11,null,"Whip cream")) //12
         locationList.add(Location("Nuts cupboard", "You can collect almonds here",null,null,null,10, "Almonds"))//13
+        locationList.add(Location("Brownie bay", "You can collect brownies here", null,0,null,null, "Brownie")) //14
+        locationList.add(Location("Pretzel station", "You can collect pretzels here", null, 3,null,null,"Pretzel")) //15
+        locationList.add(Location("Marshmallow cabin", "You can collect your marshmallow here", null,7,null,null,"Marshmallow"))
     }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -224,7 +233,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
     private lateinit var eastButton: JButton
     private lateinit var westButton: JButton
 
-    private lateinit var currentLabel: JLabel
+    private lateinit var currentLocationLabel: JLabel
     private lateinit var currentDescriptionLabel: JLabel
 
     private lateinit var item1Label: JLabel
@@ -333,12 +342,12 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         eastButton.isFocusable = false
         add(eastButton)
 
-        currentLabel = JLabel("Counter")
-        currentLabel.bounds = Rectangle(330,70,200,50)
-        currentLabel.foreground = Color.white
-        currentLabel.horizontalAlignment = SwingConstants.CENTER
-        currentLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 24)
-        add(currentLabel)
+        currentLocationLabel = JLabel("Counter")
+        currentLocationLabel.bounds = Rectangle(330,70,200,50)
+        currentLocationLabel.foreground = Color.white
+        currentLocationLabel.horizontalAlignment = SwingConstants.CENTER
+        currentLocationLabel.font = Font(Font.SANS_SERIF, Font.PLAIN, 24)
+        add(currentLocationLabel)
 
         currentDescriptionLabel = JLabel("This is where your order will be place!")
         currentDescriptionLabel.bounds = Rectangle(330, 110, 200,50)
@@ -404,7 +413,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         val foundItem = app.checkIfRoomHasItem()
 
         //Showing where the player is
-        currentLabel.text = app.locationList[app.currentLocation].name
+        currentLocationLabel.text = app.locationList[app.currentLocation].name
 
         //Changing the description and adding a small text once the item is founded
         currentDescriptionLabel.text = if (foundItem) {

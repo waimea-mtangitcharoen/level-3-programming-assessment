@@ -217,6 +217,8 @@ When the congratulations window disappear, I could see that the game has reset. 
 
 ## Feedback
 The feedback from a player is that there should be a play again button on the pop up to reset the game and clicking the cross will take you back to how it was.
+
+## Fixed
 Here is the results from adding the play again button.
 
 ![playAgainButton.gif](screenshots%2FplayAgainButton.gif)
@@ -224,3 +226,11 @@ Here is the results from adding the play again button.
 The game reset, but there is a problem with the time not displayed as the original time limit (120 s).
 
 ![Problem with new Recipe](images/newRecipeError)
+
+## Final feedback
+I let my friend tried this game. She said that I should add more rooms to the map to make it a little bit more challenging. She said that it is not too complicated at the moment, so adding maye 2 or 3 rooms will make the map a little bit more confusing and more recipes can make the game more fun and challenging.
+
+Here is the picture of the new map:
+
+
+
